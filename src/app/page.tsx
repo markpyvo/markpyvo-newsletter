@@ -1,5 +1,5 @@
-import { Component } from "@/components/ui/gradient-bar-hero-section";
+import { SubscribePage } from "@/components/subscribe-page";
 
 export default function Home() {
-  return <Component />;
+  return <SubscribePage />;
 }
