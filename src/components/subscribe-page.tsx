@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X, Mail } from "lucide-react";
 
 const avatars = [
   "https://images.pexels.com/photos/2726111/pexels-photo-2726111.jpeg?auto=compress&cs=tinysrgb&w=100",
@@ -13,6 +13,7 @@ const avatars = [
 export function SubscribePage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
+  const [contactOpen, setContactOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,12 +35,12 @@ export function SubscribePage() {
         <a href="/" className="text-2xl font-black tracking-tight text-gray-900 leading-none">
           0 → 1
         </a>
-        <a
-          href="mailto:markpyvovarov@gmail.com"
+        <button
+          onClick={() => setContactOpen(true)}
           className="text-sm font-medium text-gray-900 border border-gray-200 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors"
         >
           Contact me
-        </a>
+        </button>
       </header>
 
       <main className="flex-1 flex flex-col items-center px-5 pt-6 pb-16 max-w-md mx-auto w-full">
@@ -142,6 +143,37 @@ export function SubscribePage() {
           Unsubscribe anytime. No spam. Completely Free.
         </p>
       </main>
+      {/* Contact modal */}
+      {contactOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-5" onClick={() => setContactOpen(false)}>
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+          <div
+            className="relative bg-white rounded-3xl p-8 w-full max-w-sm shadow-xl text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setContactOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X size={18} />
+            </button>
+            <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-5">
+              <Mail size={22} className="text-gray-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Get in Touch</h2>
+            <p className="text-gray-500 text-sm leading-relaxed mb-5">
+              To inquire about a deal or to view reference videos, send an email to:
+            </p>
+            <a
+              href="mailto:markpyvovarov@gmail.com"
+              className="text-blue-600 font-medium text-base hover:underline"
+            >
+              markpyvovarov@gmail.com
+            </a>
+          </div>
+        </div>
+      )}
+
       <footer className="px-5 pb-5">
         <p className="text-xs text-gray-400">&copy;2026 Mark Pyvovarov</p>
       </footer>
