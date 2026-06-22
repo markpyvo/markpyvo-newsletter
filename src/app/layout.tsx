@@ -13,7 +13,6 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  icons: { icon: "/favicon.svg" },
   title: "0→1 by Mark — markpyvo.ca",
   description:
     "A weekly newsletter that teaches AI to beginners. No jargon, no hype — just clear, practical lessons you can use right away.",
