@@ -29,7 +29,20 @@ export function SubscribePage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <main className="flex-1 flex flex-col items-center px-5 pt-10 pb-16 max-w-md mx-auto w-full">
+      {/* Header */}
+      <header className="w-full px-6 py-4 flex items-center justify-between">
+        <a href="/" className="text-2xl font-black tracking-tight text-gray-900 leading-none">
+          0 → 1
+        </a>
+        <a
+          href="mailto:markpyvovarov@gmail.com"
+          className="text-sm font-medium text-gray-900 border border-gray-200 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors"
+        >
+          Contact me
+        </a>
+      </header>
+
+      <main className="flex-1 flex flex-col items-center px-5 pt-6 pb-16 max-w-md mx-auto w-full">
 
         {/* Headshot — small centered block */}
         <div className="w-56 h-56 overflow-hidden mb-6 bg-gray-100">
