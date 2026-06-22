@@ -65,7 +65,7 @@ export function SubscribePage() {
 
         {/* Description */}
         <p className="text-center text-gray-600 text-base leading-relaxed mb-8">
-          Weekly tips on AI and automations. If you&apos;re a beginner getting into the space, start here.
+          The AI and CS tips I wish I had at the start. From a 19-year-old CS student at McGill still figuring it out.
         </p>
 
         {/* Social icons */}
