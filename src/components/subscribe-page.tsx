@@ -216,7 +216,7 @@ export function SubscribePage() {
             </div>
 
             {/* Signature */}
-            <img src="/namescribble.png" alt="Mark" className="h-16 w-auto mt-8 select-none" />
+            <img src="/namescribble.png" alt="Mark" className="h-16 w-auto mt-8 select-none mix-blend-mode-multiply" style={{ mixBlendMode: "multiply" }} />
           </div>
         </div>
       </section>
