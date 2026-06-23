@@ -27,27 +27,27 @@ function UnsubscribeForm() {
 
         {status === "done" ? (
           <>
-            <p className="text-lg font-semibold text-gray-900 mb-2">You&apos;re unsubscribed.</p>
-            <p className="text-sm text-gray-500">Sorry to see you go. You won&apos;t hear from me again.</p>
+            <p className="text-lg font-semibold text-gray-900 mb-2">you&apos;re unsubscribed.</p>
+            <p className="text-sm text-gray-500">sorry to see you go. you won&apos;t hear from me again.</p>
           </>
         ) : (
           <>
-            <p className="text-lg font-semibold text-gray-900 mb-2">Unsubscribe</p>
+            <p className="text-lg font-semibold text-gray-900 mb-2">unsubscribe</p>
             <p className="text-sm text-gray-500 mb-6">
-              Remove <span className="text-gray-800 font-medium">{email}</span> from the newsletter?
+              remove <span className="text-gray-800 font-medium">{email}</span> from the newsletter?
             </p>
             {status === "error" && (
-              <p className="text-sm text-red-500 mb-4">Something went wrong. Try again or email me directly.</p>
+              <p className="text-sm text-red-500 mb-4">something went wrong. try again or email me directly.</p>
             )}
             <button
               onClick={handleUnsubscribe}
               disabled={status === "loading" || !email}
               className="w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:opacity-80 transition-opacity disabled:opacity-40"
             >
-              {status === "loading" ? "Removing..." : "Yes, unsubscribe me"}
+              {status === "loading" ? "removing..." : "yes, unsubscribe me"}
             </button>
             <a href="/" className="block mt-3 text-sm text-gray-400 hover:text-gray-600 transition-colors">
-              Never mind, keep me subscribed
+              never mind, keep me subscribed
             </a>
           </>
         )}

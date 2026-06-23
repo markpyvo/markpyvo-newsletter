@@ -39,7 +39,7 @@ export function SubscribePage() {
           onClick={() => setContactOpen(true)}
           className="text-sm font-medium text-gray-900 border border-gray-200 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors"
         >
-          Contact me
+          contact me
         </button>
       </header>
 
@@ -66,7 +66,7 @@ export function SubscribePage() {
 
         {/* Description */}
         <p className="text-center text-gray-600 text-base leading-relaxed mb-8">
-          The AI and CS tips I wish I had at the start. From a 19-year-old CS student at McGill still figuring it out.
+          the AI and CS tips I wish I had at the start. from a 19-year-old CS student at McGill still figuring it out.
         </p>
 
         {/* Social icons */}
@@ -106,15 +106,15 @@ export function SubscribePage() {
         {/* Subscribe card */}
         <div className="w-full bg-gray-100 rounded-2xl p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-1">
-            Subscribe to my weekly newsletter
+            subscribe to my weekly newsletter
           </h2>
           <p className="text-sm text-gray-500 mb-5">
-            Join over 1,500 students, builders and tech enthusiasts
+            join over 1,500 students, builders and tech enthusiasts
           </p>
 
           {status === "done" ? (
             <div className="w-full text-center py-3 rounded-xl bg-white text-gray-700 text-sm font-medium">
-              You&apos;re in — check your inbox 🎉
+              you&apos;re in — check your inbox 🎉
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
@@ -123,7 +123,7 @@ export function SubscribePage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email..."
+                  placeholder="enter your email..."
                   required
                   className="flex-1 text-sm text-gray-800 placeholder:text-gray-400 bg-transparent outline-none py-2"
                 />
@@ -132,7 +132,7 @@ export function SubscribePage() {
                   disabled={status === "loading"}
                   className="flex items-center gap-1.5 text-sm font-semibold text-gray-900 hover:opacity-70 transition-opacity disabled:opacity-40 whitespace-nowrap ml-2"
                 >
-                  {status === "loading" ? "..." : <>Subscribe <ArrowRight size={15} /></>}
+                  {status === "loading" ? "..." : <>subscribe <ArrowRight size={15} /></>}
                 </button>
               </div>
             </form>
@@ -140,7 +140,7 @@ export function SubscribePage() {
         </div>
 
         <p className="text-xs text-gray-400 mt-3 text-center">
-          Unsubscribe anytime. No spam. Completely Free.
+          unsubscribe anytime. no spam. completely free.
         </p>
       </main>
       {/* Contact modal */}
@@ -160,9 +160,9 @@ export function SubscribePage() {
             <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-5">
               <Mail size={22} className="text-gray-500" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Get in Touch</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">get in touch</h2>
             <p className="text-gray-500 text-sm leading-relaxed mb-5">
-              To inquire about a deal or to view reference videos, send an email to:
+              to inquire about a deal or to view reference videos, send an email to:
             </p>
             <a
               href="mailto:markpyvovarov@gmail.com"
