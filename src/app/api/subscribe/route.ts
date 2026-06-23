@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
         email,
         reactivate_existing: false,
         send_welcome_email: true,
+        utm_source: "markpyvo.ca",
       }),
     }
   );
