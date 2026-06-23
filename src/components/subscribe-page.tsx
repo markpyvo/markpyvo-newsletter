@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, X, Mail } from "lucide-react";
+import { X, Mail } from "lucide-react";
 
 const faqs = [
   {
@@ -123,44 +123,34 @@ export function SubscribePage() {
           </span>
         </div>
 
-        {/* Subscribe card */}
-        <div className="w-full bg-gray-100 rounded-2xl p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-1">
-            subscribe to my weekly newsletter
-          </h2>
-          <p className="text-sm text-gray-500 mb-5">
-            join over 1,500 students, builders and tech enthusiasts
-          </p>
+        {/* Subscribe form — clean hero style */}
+        {status === "done" ? (
+          <div className='w-full text-center py-4 text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase'>
+            you&apos;re in — check your inbox ✓
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="w-full flex gap-2 mt-2">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+              className='flex-1 text-sm text-gray-800 placeholder:text-gray-400 bg-white outline-none px-4 py-3 border border-gray-200 rounded-[4px] [font-family:"Space_Mono","Courier_New",monospace]'
+            />
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className='shrink-0 bg-white border border-gray-200 rounded-[4px] px-5 py-3 [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase font-bold text-gray-900 hover:border-gray-400 transition-colors disabled:opacity-40'
+            >
+              {status === "loading" ? "..." : "Join Free"}
+            </button>
+          </form>
+        )}
 
-          {status === "done" ? (
-            <div className="w-full text-center py-3 rounded-xl bg-white text-gray-700 text-sm font-medium">
-              you&apos;re in — check your inbox 🎉
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div className="flex items-center bg-white rounded-xl px-4 py-1">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="enter your email..."
-                  required
-                  className="flex-1 text-sm text-gray-800 placeholder:text-gray-400 bg-transparent outline-none py-2"
-                />
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="flex items-center gap-1.5 text-sm font-semibold text-gray-900 hover:opacity-70 transition-opacity disabled:opacity-40 whitespace-nowrap ml-2"
-                >
-                  {status === "loading" ? "..." : <>subscribe <ArrowRight size={15} /></>}
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-
-        <p className="text-xs text-gray-400 mt-3 text-center">
-          unsubscribe anytime. no spam. completely free.
+        <p className='flex items-center gap-2 text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase mt-4'>
+          <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
+          Join 1,500+ other readers every Monday
         </p>
       </main>
 
@@ -226,7 +216,7 @@ export function SubscribePage() {
             </div>
 
             {/* Signature */}
-            <p className="text-[28px] font-bold text-[#121212] leading-none mt-8" style={{ fontFamily: "var(--font-syne), sans-serif" }}>— Mark</p>
+            <img src="/namescribble.png" alt="Mark" className="h-16 w-auto mt-8 select-none" />
           </div>
         </div>
       </section>
@@ -370,8 +360,8 @@ export function SubscribePage() {
             <p className="text-[#7e7e7e] text-sm leading-relaxed mb-5">
               For sponsorships, collaborations, or just to say hi:
             </p>
-            <a href="mailto:mark@markpyvo.ca" className="text-[#4040ff] font-medium text-sm hover:underline">
-              mark@markpyvo.ca
+            <a href="mailto:markpyvovarov@gmail.com" className="text-[#4040ff] font-medium text-sm hover:underline">
+              markpyvovarov@gmail.com
             </a>
           </div>
         </div>
