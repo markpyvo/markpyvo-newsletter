@@ -64,8 +64,17 @@ export async function POST(req: NextRequest) {
           <!-- Card -->
           <tr>
             <td style="background:#ffffff;border-radius:8px;border:1px solid #e2e0d8;padding:48px 48px 40px;">
-              <p style="margin:0 0 32px;font-size:13px;font-weight:500;letter-spacing:2.5px;color:#888780;text-transform:uppercase;">welcome aboard</p>
-              <h1 style="margin:0 0 24px;font-size:32px;font-weight:700;line-height:1.2;color:#111110;letter-spacing:-1px;">you're in.</h1>
+              <table cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:32px;">
+                <tr>
+                  <td style="vertical-align:top;">
+                    <p style="margin:0 0 20px;font-size:13px;font-weight:500;letter-spacing:2.5px;color:#888780;text-transform:uppercase;">welcome aboard</p>
+                    <h1 style="margin:0;font-size:32px;font-weight:700;line-height:1.2;color:#111110;letter-spacing:-1px;">you're in.</h1>
+                  </td>
+                  <td style="vertical-align:top;text-align:right;width:110px;">
+                    <img src="https://markpyvo.ca/mark-pro.png" alt="Mark" width="100" height="100" style="display:inline-block;object-fit:cover;border-radius:0;" />
+                  </td>
+                </tr>
+              </table>
               <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#3a3a38;">
                 hey, i'm mark. 19-year-old cs student at mcgill, making content about ai and tech on the side.
               </p>
