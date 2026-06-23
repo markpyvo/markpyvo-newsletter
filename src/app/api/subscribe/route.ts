@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
         <p style="font-size: 16px; color: #444; margin: 0;">— Mark</p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
         <p style="font-size: 12px; color: #999;">
-          You subscribed at markpyvo.ca. <a href="mailto:markpyvovarov@gmail.com" style="color: #999;">Unsubscribe</a> anytime.
+          You subscribed at markpyvo.ca. <a href="https://markpyvo.ca/unsubscribe?email=${encodeURIComponent(email)}" style="color: #999;">Unsubscribe</a> anytime.
         </p>
       </div>
     `,
