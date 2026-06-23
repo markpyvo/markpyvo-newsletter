@@ -111,18 +111,6 @@ export function SubscribePage() {
           </a>
         </div>
 
-        {/* Trust pill */}
-        <div className="inline-flex items-center gap-2.5 bg-gray-100 rounded-full py-2 px-4 mb-6">
-          <div className="flex -space-x-2">
-            {avatars.map((src, i) => (
-              <img key={i} src={src} alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" />
-            ))}
-          </div>
-          <span className="text-sm text-gray-700">
-            <span className="font-semibold text-gray-900">1.5K</span> readers so far
-          </span>
-        </div>
-
         {/* Subscribe form — clean hero style */}
         {status === "done" ? (
           <div className='w-full text-center py-4 text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase'>
