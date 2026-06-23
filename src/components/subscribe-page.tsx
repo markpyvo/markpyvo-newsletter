@@ -32,8 +32,8 @@ export function SubscribePage() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="w-full px-6 py-4 flex items-center justify-between">
-        <a href="/" className="text-2xl font-black tracking-tight text-gray-900 leading-none">
-          0 → 1
+        <a href="/">
+          <img src="/logo.svg" alt="0→1" className="h-8 w-auto" />
         </a>
         <button
           onClick={() => setContactOpen(true)}
