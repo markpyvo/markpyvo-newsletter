@@ -154,26 +154,6 @@ export function SubscribePage() {
         </p>
       </main>
 
-      {/* ── Mac window preview placeholder ── */}
-      <section className="pb-20 px-5">
-        <div className="w-full max-w-lg mx-auto">
-          <div className="bg-white overflow-hidden shadow-[rgb(227,227,227)_0px_2px_0px_0px,rgba(0,0,0,0.08)_0px_8px_24px_0px] border border-[rgba(33,33,33,0.25)] rounded-sm">
-            <div className="bg-[#f8f8f8] flex items-center px-4 py-3 border-b border-[rgba(33,33,33,0.12)]">
-              <div className="flex gap-1.5">
-                <span className="bg-[#e3e3e3] w-2.5 h-2.5 block rounded-full border border-[rgba(33,33,33,0.25)]" />
-                <span className="bg-[#e3e3e3] w-2.5 h-2.5 block rounded-full border border-[rgba(33,33,33,0.25)]" />
-                <span className="bg-[#e3e3e3] w-2.5 h-2.5 block rounded-full border border-[rgba(33,33,33,0.25)]" />
-              </div>
-            </div>
-            <div className="bg-[#f8f8f8] aspect-video flex justify-center items-center">
-              <p className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase'>
-                Preview coming soon
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── Letter ── */}
       <section className="px-5 pb-20">
         <div className="w-full max-w-lg mx-auto">
