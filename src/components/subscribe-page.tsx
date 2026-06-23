@@ -319,9 +319,6 @@ export function SubscribePage() {
             >
               <X size={18} />
             </button>
-            <div className="w-12 h-12 bg-[rgba(64,64,255,0.1)] rounded-full flex items-center justify-center mx-auto mb-5">
-              <Mail size={20} className="text-[#4040ff]" />
-            </div>
             <h2 className='text-xl font-semibold text-[#121212] mb-3 [font-family:"Space_Mono","Courier_New",monospace]'>
               GET IN TOUCH
             </h2>
