@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { X, Mail } from "lucide-react";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 
 const faqs = [
   {
@@ -22,17 +23,9 @@ const faqs = [
   },
 ];
 
-const avatars = [
-  "https://images.pexels.com/photos/2726111/pexels-photo-2726111.jpeg?auto=compress&cs=tinysrgb&w=100",
-  "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=100",
-  "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=100",
-  "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=100",
-];
-
 export function SubscribePage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
-  const [contactOpen, setContactOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,20 +43,9 @@ export function SubscribePage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <header className="w-full px-6 py-4 flex items-center justify-between">
-        <a href="/">
-          <img src="/logo.svg" alt="0→1" className="h-8 w-auto" />
-        </a>
-        <button
-          onClick={() => setContactOpen(true)}
-          className="text-sm font-medium text-gray-900 border border-gray-200 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors"
-        >
-          contact me
-        </button>
-      </header>
+      <SiteHeader />
 
-      <main className="flex-1 flex flex-col items-center px-5 pt-6 pb-16 max-w-md mx-auto w-full">
+      <main id="subscribe" className="flex-1 flex flex-col items-center px-5 pt-6 pb-16 max-w-md mx-auto w-full">
 
         {/* Headshot — small centered block */}
         <div className="w-56 h-56 overflow-hidden mb-6 bg-gray-100">
@@ -219,118 +201,7 @@ export function SubscribePage() {
         </div>
       </section>
 
-      {/* ── Bottom gradient shade ── */}
-      <div aria-hidden="true" className="w-full overflow-hidden">
-        <div
-          className="w-full h-[100px] [mask-image:linear-gradient(rgba(0,0,0,0)_0%,rgb(0,0,0)_100%)]"
-          style={{ background: "repeating-linear-gradient(transparent, transparent 3px, rgba(33,33,33,0.05) 3px, rgba(33,33,33,0.05) 4px)" }}
-        />
-      </div>
-
-      {/* ── Footer ── */}
-      <footer className="pt-16 pb-8 px-5">
-        <div className="w-full max-w-lg mx-auto">
-          <div className="grid gap-x-12 grid-cols-[1fr_auto] grid-rows-[auto_auto_auto]">
-            {/* Logo */}
-            <a href="/" aria-label="0→1 by Mark Home" className="block self-center col-start-1 row-start-1 hover:opacity-80">
-              <img src="/logo.svg" alt="0→1 by Mark" className="h-10 w-auto" />
-            </a>
-
-            {/* Social icons */}
-            <div className="flex self-center gap-2 col-start-2 row-start-1 justify-self-end">
-              {[
-                {
-                  href: "https://www.instagram.com/markpyvovarov/",
-                  label: "Follow on Instagram",
-                  icon: (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#121212" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                    </svg>
-                  ),
-                },
-                {
-                  href: "https://www.tiktok.com/@markpyvovarov",
-                  label: "Follow on TikTok",
-                  icon: (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#121212">
-                      <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.56V6.79a4.85 4.85 0 01-1.07-.1z" />
-                    </svg>
-                  ),
-                },
-                {
-                  href: "https://www.linkedin.com/in/markpyvovarov/",
-                  label: "Connect on LinkedIn",
-                  icon: (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#121212">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                    </svg>
-                  ),
-                },
-              ].map(({ href, label, icon }) => (
-                <a
-                  key={href}
-                  href={href}
-                  aria-label={label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className='bg-white min-w-[30px] min-h-[30px] flex justify-center items-center shadow-[rgb(227,227,227)_-2px_-2px_0px_0px_inset] p-1.5 rounded-br-[4px] rounded-t-[4px] rounded-bl-[4px] border border-[#cccccc] hover:border-[#4040ff] transition-colors'
-                >
-                  {icon}
-                </a>
-              ))}
-            </div>
-
-            {/* Footer nav */}
-            <nav className="flex flex-col items-end gap-1 col-start-2 row-start-2 row-end-4 justify-self-end mt-6">
-              <a href="/unsubscribe" className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase block hover:text-[#4040ff] transition-colors'>
-                Unsubscribe
-              </a>
-              <button
-                onClick={() => setContactOpen(true)}
-                className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase block hover:text-[#4040ff] transition-colors bg-transparent border-none cursor-pointer p-0'
-              >
-                Contact
-              </button>
-            </nav>
-
-            {/* Copyright */}
-            <div className="col-start-1 row-start-2 mt-6">
-              <p className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase my-0'>
-                © 2026 0 → 1 BY MARK. ALL RIGHTS RESERVED.
-              </p>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* ── Contact modal ── */}
-      {contactOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-5" onClick={() => setContactOpen(false)}>
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-          <div
-            className="relative bg-white rounded-[8px] p-8 w-full max-w-sm shadow-xl text-center border border-[rgba(33,33,33,0.12)]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setContactOpen(false)}
-              className="absolute top-4 right-4 text-[#aaaaaa] hover:text-[#121212] transition-colors"
-            >
-              <X size={18} />
-            </button>
-            <h2 className='text-xl font-semibold text-[#121212] mb-3 [font-family:"Space_Mono","Courier_New",monospace]'>
-              GET IN TOUCH
-            </h2>
-            <p className="text-[#7e7e7e] text-sm leading-relaxed mb-5">
-              For sponsorships, collaborations, or just to say hi:
-            </p>
-            <a href="mailto:markpyvovarov@gmail.com" className="text-[#4040ff] font-medium text-sm hover:underline">
-              markpyvovarov@gmail.com
-            </a>
-          </div>
-        </div>
-      )}
+      <SiteFooter />
     </div>
   );
 }

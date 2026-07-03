@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Obvious AI">
+  <rect width="300" height="300" rx="66" fill="#25401f"/>
+  <g fill="none" stroke="#c9dcc0" stroke-width="7" stroke-linejoin="round">
+    <circle cx="208" cy="150" r="58"/>
+    <circle cx="179" cy="200.2" r="58"/>
+    <circle cx="121" cy="200.2" r="58"/>
+    <circle cx="92" cy="150" r="58"/>
+    <circle cx="121" cy="99.8" r="58"/>
+    <circle cx="179" cy="99.8" r="58"/>
+  </g>
+</svg>

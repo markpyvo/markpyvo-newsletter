@@ -25,13 +25,13 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "0→1 by Mark — markpyvo.ca",
+  title: "0→1 by Mark · markpyvo.ca",
   description:
-    "A weekly newsletter that teaches AI to beginners. No jargon, no hype — just clear, practical lessons you can use right away.",
+    "A weekly newsletter that teaches AI to beginners. No jargon, no hype, just clear, practical lessons you can use right away.",
   openGraph: {
-    title: "AI Made Simple — markpyvo.ca",
+    title: "AI Made Simple · markpyvo.ca",
     description:
-      "A weekly newsletter that teaches AI to beginners. No jargon, no hype — just clear, practical lessons you can use right away.",
+      "A weekly newsletter that teaches AI to beginners. No jargon, no hype, just clear, practical lessons you can use right away.",
     url: "https://markpyvo.ca",
     siteName: "AI Made Simple",
     locale: "en_CA",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Made Simple — markpyvo.ca",
+    title: "AI Made Simple · markpyvo.ca",
     description: "Weekly AI lessons for beginners.",
   },
   metadataBase: new URL("https://markpyvo.ca"),
