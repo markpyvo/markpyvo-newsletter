@@ -35,6 +35,7 @@ const MEDIA_KIT = {
   brands: [
     { name: "Higgsfield", logo: "/brands/higgsfield.svg" },
     { name: "Whop", logo: "/brands/whop.png" },
+    { name: "Cluely", logo: "/brands/cluely.svg" },
     { name: "Jobright.ai", logo: "/brands/jobright.png" },
     { name: "Obvious AI", logo: "/brands/obvious.svg" },
   ] as { name: string; logo?: string }[],
@@ -187,7 +188,7 @@ export function PartnershipsPage() {
             <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">
               Brands I&apos;ve worked with
             </h2>
-            <div className="max-w-2xl mx-auto grid grid-cols-3 sm:grid-cols-4 gap-6">
+            <div className="max-w-2xl mx-auto grid grid-cols-3 sm:grid-cols-5 gap-6">
               {MEDIA_KIT.brands.map((b, i) => (
                 <div key={i} className="flex flex-col items-center gap-2">
                   {b.logo ? (
