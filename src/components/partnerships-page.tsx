@@ -18,6 +18,10 @@ import {
    ────────────────────────────────────────────────────────────── */
 const MEDIA_KIT = {
   email: "markpyvovarov@gmail.com",
+  // Monthly reach from Instagram Insights. Reach is private and cannot be
+  // scraped, so update this by hand when it changes. It is both the "monthly
+  // reach" card and the denominator for engagement-by-reach.
+  reachMonthly: 802514,
   // Headline stats (shown as the big cards)
   stats: [
     { value: "6,235", label: "Instagram followers" },
@@ -137,13 +141,19 @@ export async function PartnershipsPage() {
     getKitSubscriberCount(),
   ]);
   const base = MEDIA_KIT.stats;
+  // Engagement by reach: 30-day interactions (scraped) over monthly reach
+  // (manual). Both are ~30-day totals, so the ratio is a clean period metric.
+  const engagementRate =
+    ig && ig.interactions30d != null && ig.posts30d > 0
+      ? (ig.interactions30d / MEDIA_KIT.reachMonthly) * 100
+      : null;
   const stats = [
     {
       ...base[0],
       value: ig?.followers ? ig.followers.toLocaleString("en-US") : base[0].value,
     },
-    ...(ig?.engagementRate != null
-      ? [{ value: `${ig.engagementRate.toFixed(1)}%`, label: "engagement rate" }]
+    ...(engagementRate != null
+      ? [{ value: `${engagementRate.toFixed(1)}%`, label: "engagement rate" }]
       : []),
     base[1],
     {

@@ -1,7 +1,8 @@
 // Server-only. Pulls public Instagram stats via the Apify Instagram Profile
-// Scraper. Only public data is available: follower count, and an engagement
-// rate computed from recent public posts. Reach/impressions and audience
-// demographics are private and cannot be scraped, so those stay manual.
+// Scraper. Only public data is available: follower count, and per-post likes +
+// comments. Reach/impressions and audience demographics are private and cannot
+// be scraped, so reach stays a manual figure (see MEDIA_KIT.reachMonthly) and
+// engagement-by-reach is computed in the page from these scraped interactions.
 //
 // Cached and tagged "instagram-stats"; the weekly Vercel cron
 // (/api/cron/refresh-media-kit) busts the tag so it refreshes about weekly.
@@ -9,13 +10,23 @@
 // the scrape fails.
 export type InstagramStats = {
   followers: number;
-  engagementRate: number | null;
+  // Total likes + comments across posts from the last 30 days. null when no
+  // usable recent posts came back.
+  interactions30d: number | null;
+  // How many posts that total is based on (0 when none in the window).
+  posts30d: number;
 };
 
 type ApifyProfile = {
   followersCount?: number;
-  latestPosts?: Array<{ likesCount?: number; commentsCount?: number }>;
+  latestPosts?: Array<{
+    likesCount?: number;
+    commentsCount?: number;
+    timestamp?: string;
+  }>;
 };
+
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 export async function getInstagramStats(): Promise<InstagramStats | null> {
   const token = process.env.APIFY_TOKEN;
@@ -41,21 +52,25 @@ export async function getInstagramStats(): Promise<InstagramStats | null> {
     const followers = profile?.followersCount;
     if (typeof followers !== "number" || followers <= 0) return null;
 
-    // Engagement rate = average (likes + comments) per recent post / followers.
-    // likesCount can be -1 when a post hides its like count, so filter those.
-    const posts = (profile.latestPosts ?? []).filter(
-      (p) => typeof p.likesCount === "number" && p.likesCount >= 0,
-    );
-    let engagementRate: number | null = null;
-    if (posts.length > 0) {
-      const totalInteractions = posts.reduce(
+    // Keep only posts from the last 30 days with a real like count. likesCount
+    // is -1 when a post hides its likes, so those get filtered out.
+    const cutoff = Date.now() - THIRTY_DAYS_MS;
+    const recent = (profile.latestPosts ?? []).filter((p) => {
+      if (typeof p.likesCount !== "number" || p.likesCount < 0) return false;
+      if (!p.timestamp) return false;
+      const t = new Date(p.timestamp).getTime();
+      return Number.isFinite(t) && t >= cutoff;
+    });
+
+    let interactions30d: number | null = null;
+    if (recent.length > 0) {
+      interactions30d = recent.reduce(
         (sum, p) => sum + (p.likesCount ?? 0) + (p.commentsCount ?? 0),
         0,
       );
-      engagementRate = (totalInteractions / posts.length / followers) * 100;
     }
 
-    return { followers, engagementRate };
+    return { followers, interactions30d, posts30d: recent.length };
   } catch {
     return null;
   }
