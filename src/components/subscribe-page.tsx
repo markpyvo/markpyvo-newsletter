@@ -23,10 +23,20 @@ const faqs = [
   },
 ];
 
-export function SubscribePage() {
+export function SubscribePage({
+  subscriberCount = null,
+}: {
+  subscriberCount?: number | null;
+}) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  // Round the live Kit count down to the nearest 100 and add "+", so the copy
+  // stays honest and on-brand ("1,500+"). Falls back to the static value.
+  const readers = subscriberCount
+    ? `${(Math.floor(subscriberCount / 100) * 100).toLocaleString("en-US")}+`
+    : "1,500+";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,7 +106,7 @@ export function SubscribePage() {
         {/* Subscribe form — clean hero style */}
         {status === "done" ? (
           <div className='w-full text-center py-4 text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase'>
-            you&apos;re in — check your inbox ✓
+            you&apos;re in, check your inbox ✓
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="w-full flex gap-2 mt-2">
@@ -120,7 +130,7 @@ export function SubscribePage() {
 
         <p className='flex items-center gap-2 text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase mt-4'>
           <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
-          Join 1,500+ other readers every Monday
+          Join {readers} other readers every Monday
         </p>
       </main>
 
