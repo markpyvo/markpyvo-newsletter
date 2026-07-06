@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { getKitSubscriberCount } from "@/lib/kit";
 import {
   Clapperboard,
   Mail,
@@ -124,8 +125,17 @@ function Bar({
   );
 }
 
-export function PartnershipsPage() {
+export async function PartnershipsPage() {
   const showBrands = MEDIA_KIT.brands.length > 0;
+
+  // Live Kit subscriber count (refreshed weekly by cron), falling back to the
+  // static value when the API is unavailable.
+  const kitCount = await getKitSubscriberCount();
+  const stats = MEDIA_KIT.stats.map((s) =>
+    s.label === "newsletter subscribers" && kitCount
+      ? { ...s, value: kitCount.toLocaleString("en-US") }
+      : s,
+  );
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -163,7 +173,7 @@ export function PartnershipsPage() {
 
         {/* Stats */}
         <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16">
-          {MEDIA_KIT.stats.map((s) => (
+          {stats.map((s) => (
             <StatCard key={s.label} {...s} />
           ))}
         </section>
