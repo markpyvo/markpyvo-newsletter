@@ -18,9 +18,9 @@ export function SiteHeader() {
 
   return (
     <header className="w-full border-b border-gray-100">
-      <div className="max-w-5xl mx-auto px-5 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-5xl mx-auto px-5 sm:px-6 h-16 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
         {/* Brand: square face + name */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0 group" aria-label="Mark, home">
+        <Link href="/" className="flex items-center gap-2.5 shrink-0 justify-self-start group" aria-label="Mark, home">
           <img
             src="/mark.jpg"
             alt="Mark"
@@ -32,7 +32,7 @@ export function SiteHeader() {
         </Link>
 
         {/* Nav */}
-        <nav className="flex items-center gap-1">
+        <nav className="flex items-center gap-1 justify-self-center">
           {navLinks.map(({ label, href }) => (
             <Link
               key={href}
@@ -51,7 +51,7 @@ export function SiteHeader() {
         {/* CTA */}
         <Link
           href="/#subscribe"
-          className='shrink-0 hidden sm:inline-flex items-center bg-gray-900 text-white [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase font-bold px-4 py-2 rounded-[4px] hover:bg-[#4040ff] transition-colors'
+          className='shrink-0 justify-self-end hidden sm:inline-flex items-center bg-gray-900 text-white [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase font-bold px-4 py-2 rounded-[4px] hover:bg-[#4040ff] transition-colors'
         >
           sign up for my newsletter
         </Link>

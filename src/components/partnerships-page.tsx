@@ -19,15 +19,15 @@ import {
    ────────────────────────────────────────────────────────────── */
 const MEDIA_KIT = {
   email: "markpyvovarov@gmail.com",
-  // Monthly reach from Instagram Insights. Reach is private and cannot be
-  // scraped, so update this by hand when it changes. It is both the "monthly
-  // reach" card and the denominator for engagement-by-reach.
-  reachMonthly: 802514,
-  // Headline stats (shown as the big cards)
+  // Headline stats (shown as the big cards). Followers and subscribers are
+  // overridden with live values (Instagram via Apify, subscribers via Kit).
+  // Engagement rate and monthly impressions are private, so they are manual:
+  // update them by hand from your Instagram Insights / Beacons media kit.
   stats: [
-    { value: "6,235", label: "Instagram followers" },
-    { value: "802K", label: "monthly reach" },
-    { value: "1,500+", label: "newsletter subscribers" }, // TODO: confirm current Kit count
+    { value: "6,235", label: "Instagram followers" }, // live from Apify
+    { value: "7.3%", label: "engagement rate" }, // manual
+    { value: "1M+", label: "monthly impressions" }, // manual
+    { value: "1,500+", label: "newsletter subscribers" }, // live from Kit
   ],
   // Audience age breakdown
   age: [
@@ -142,24 +142,16 @@ export async function PartnershipsPage() {
     getKitSubscriberCount(),
   ]);
   const base = MEDIA_KIT.stats;
-  // Engagement by reach: 30-day interactions (scraped) over monthly reach
-  // (manual). Both are ~30-day totals, so the ratio is a clean period metric.
-  const engagementRate =
-    ig && ig.interactions30d != null && ig.posts30d > 0
-      ? (ig.interactions30d / MEDIA_KIT.reachMonthly) * 100
-      : null;
   const stats = [
     {
       ...base[0],
       value: ig?.followers ? ig.followers.toLocaleString("en-US") : base[0].value,
     },
-    ...(engagementRate != null
-      ? [{ value: `${engagementRate.toFixed(1)}%`, label: "engagement rate" }]
-      : []),
-    base[1],
+    base[1], // engagement rate (manual)
+    base[2], // monthly impressions (manual)
     {
-      ...base[2],
-      value: kitCount ? kitCount.toLocaleString("en-US") : base[2].value,
+      ...base[3],
+      value: kitCount ? kitCount.toLocaleString("en-US") : base[3].value,
     },
   ];
   const statsGrid =
