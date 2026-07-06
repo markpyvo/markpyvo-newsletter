@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { X } from "lucide-react";
+import { ContactModal } from "@/components/contact-modal";
 
 const socials = [
   {
@@ -105,31 +105,7 @@ export function SiteFooter() {
       </footer>
 
       {/* ── Contact modal ── */}
-      {contactOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-5" onClick={() => setContactOpen(false)}>
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-          <div
-            className="relative bg-white rounded-[8px] p-8 w-full max-w-sm shadow-xl text-center border border-[rgba(33,33,33,0.12)]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setContactOpen(false)}
-              className="absolute top-4 right-4 text-[#aaaaaa] hover:text-[#121212] transition-colors"
-            >
-              <X size={18} />
-            </button>
-            <h2 className='text-xl font-semibold text-[#121212] mb-3 [font-family:"Space_Mono","Courier_New",monospace]'>
-              GET IN TOUCH
-            </h2>
-            <p className="text-[#7e7e7e] text-sm leading-relaxed mb-5">
-              For sponsorships, collaborations, or just to say hi:
-            </p>
-            <a href="mailto:markpyvovarov@gmail.com" className="text-[#4040ff] font-medium text-sm hover:underline">
-              markpyvovarov@gmail.com
-            </a>
-          </div>
-        </div>
-      )}
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PartnershipsHeroActions } from "@/components/partnerships-hero-actions";
 import { getKitSubscriberCount } from "@/lib/kit";
 import { getInstagramStats } from "@/lib/instagram";
 import {
@@ -182,20 +183,7 @@ export async function PartnershipsPage() {
             video plus a weekly newsletter, for an audience that&apos;s actually
             trying to learn, not just scroll.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <a
-              href={`mailto:${MEDIA_KIT.email}`}
-              className={`inline-flex items-center bg-gray-900 text-white text-[11px] font-bold px-6 py-3 rounded-[4px] hover:bg-[#4040ff] transition-colors ${MONO}`}
-            >
-              work with me
-            </a>
-            <a
-              href="/#subscribe"
-              className={`inline-flex items-center bg-white text-gray-900 text-[11px] font-bold px-6 py-3 rounded-[4px] border border-gray-200 hover:border-gray-400 transition-colors ${MONO}`}
-            >
-              see the newsletter
-            </a>
-          </div>
+          <PartnershipsHeroActions email={MEDIA_KIT.email} />
         </section>
 
         {/* Stats */}
