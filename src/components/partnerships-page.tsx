@@ -1,6 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getKitSubscriberCount } from "@/lib/kit";
+import { getInstagramStats } from "@/lib/instagram";
 import {
   Clapperboard,
   Mail,
@@ -128,14 +129,30 @@ function Bar({
 export async function PartnershipsPage() {
   const showBrands = MEDIA_KIT.brands.length > 0;
 
-  // Live Kit subscriber count (refreshed weekly by cron), falling back to the
-  // static value when the API is unavailable.
-  const kitCount = await getKitSubscriberCount();
-  const stats = MEDIA_KIT.stats.map((s) =>
-    s.label === "newsletter subscribers" && kitCount
-      ? { ...s, value: kitCount.toLocaleString("en-US") }
-      : s,
-  );
+  // Live analytics (refreshed weekly by cron), each falling back to the static
+  // MEDIA_KIT value when its API is unavailable. base order: followers,
+  // monthly reach, newsletter subscribers.
+  const [ig, kitCount] = await Promise.all([
+    getInstagramStats(),
+    getKitSubscriberCount(),
+  ]);
+  const base = MEDIA_KIT.stats;
+  const stats = [
+    {
+      ...base[0],
+      value: ig?.followers ? ig.followers.toLocaleString("en-US") : base[0].value,
+    },
+    ...(ig?.engagementRate != null
+      ? [{ value: `${ig.engagementRate.toFixed(1)}%`, label: "engagement rate" }]
+      : []),
+    base[1],
+    {
+      ...base[2],
+      value: kitCount ? kitCount.toLocaleString("en-US") : base[2].value,
+    },
+  ];
+  const statsGrid =
+    stats.length >= 4 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-1 sm:grid-cols-3";
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -172,7 +189,7 @@ export async function PartnershipsPage() {
         </section>
 
         {/* Stats */}
-        <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16">
+        <section className={`grid ${statsGrid} gap-4 mb-16`}>
           {stats.map((s) => (
             <StatCard key={s.label} {...s} />
           ))}

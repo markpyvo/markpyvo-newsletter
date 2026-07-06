@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/cron/refresh-kit",
+      "path": "/api/cron/refresh-media-kit",
       "schedule": "0 8 * * 1"
     }
   ]
