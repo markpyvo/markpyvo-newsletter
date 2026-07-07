@@ -29,14 +29,6 @@ const MEDIA_KIT = {
     { value: "1M+", label: "monthly impressions" }, // manual
     { value: "1,500+", label: "newsletter subscribers" }, // live from Kit
   ],
-  // Audience age breakdown
-  age: [
-    { range: "18-24", pct: 56.1 },
-    { range: "25-34", pct: 28.1 },
-    { range: "35-44", pct: 6.7 },
-    { range: "45-54", pct: 4.2 },
-    { range: "55-64", pct: 0.8 },
-  ],
   // Brands you've worked with. Leave [] to hide the whole section.
   // Each: { name, logo? }. logo is an optional image path in /public.
   brands: [
@@ -102,35 +94,6 @@ function StatCard({ value, label }: { value: string; label: string }) {
   );
 }
 
-function Bar({
-  label,
-  pct,
-  color,
-  labelWidth = "w-12",
-}: {
-  label: string;
-  pct: number;
-  color: string;
-  labelWidth?: string;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <span className={`${labelWidth} shrink-0 text-[#7e7e7e] text-[11px] ${MONO}`}>
-        {label}
-      </span>
-      <div className="relative h-6 grow overflow-hidden rounded-full bg-gray-100">
-        <div
-          className="h-full rounded-full"
-          style={{ width: `${pct}%`, background: color }}
-        />
-        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] font-bold text-gray-900">
-          {pct}%
-        </span>
-      </div>
-    </div>
-  );
-}
-
 export async function PartnershipsPage() {
   const showBrands = MEDIA_KIT.brands.length > 0;
 
@@ -183,20 +146,6 @@ export async function PartnershipsPage() {
           {stats.map((s) => (
             <StatCard key={s.label} {...s} />
           ))}
-        </section>
-
-        {/* Demographics: audience age */}
-        <section className="max-w-lg mx-auto mb-16">
-          <div className="bg-white p-6 rounded-[8px] border border-gray-200">
-            <h3 className={`text-gray-900 text-[13px] font-bold mb-5 ${MONO}`}>
-              audience age
-            </h3>
-            <div className="flex flex-col gap-3">
-              {MEDIA_KIT.age.map((a) => (
-                <Bar key={a.range} label={a.range} pct={a.pct} color="#4040ff" />
-              ))}
-            </div>
-          </div>
         </section>
 
         {/* Brands */}
