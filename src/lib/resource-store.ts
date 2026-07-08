@@ -88,9 +88,10 @@ export async function getImportedResources(
       `${cfg.url}/rest/v1/resources?select=*${statusFilter}&order=date.desc`,
       {
         headers: { apikey: cfg.key, Authorization: `Bearer ${cfg.key}` },
-        ...(opts.fresh
-          ? { cache: "no-store" as const }
-          : { next: { revalidate: 3600, tags: ["resources"] } }),
+        // Always read fresh so the list/detail reflect approvals and imports
+        // immediately. One small Supabase query per view is fine at this traffic
+        // and avoids the stale-cache bugs the tagged cache kept causing.
+        cache: "no-store",
       },
     );
     if (!res.ok) return [];

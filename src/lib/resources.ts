@@ -45,65 +45,10 @@ export const TYPES: ResourceType[] = [
   "Tools",
 ];
 
-// PLACEHOLDER seed data. Replace with your real resources (or let the
-// automation fill this in). Titles/teasers below are examples in your voice.
-export const RESOURCES: Resource[] = [
-  {
-    slug: "prompt-engineering-starter-pack",
-    title: "The Prompt Engineering Starter Pack",
-    teaser:
-      "The 5 prompt patterns I use every day, in plain English, with copy-paste examples for beginners.",
-    type: "Prompts",
-    tool: "Multi-Tool",
-    url: "#",
-    date: "2026-06-30",
-    popularity: 95,
-  },
-  {
-    slug: "claude-projects-setup",
-    title: "Set Up Claude Projects the Right Way",
-    teaser:
-      "Turn Claude into a tool that remembers your context. A step-by-step setup for first-timers.",
-    type: "Guides",
-    tool: "Claude",
-    url: "#",
-    date: "2026-06-24",
-    popularity: 80,
-  },
-  {
-    slug: "chatgpt-weekly-review",
-    title: "Run Your Weekly Review With ChatGPT",
-    teaser:
-      "A simple workflow that turns a messy brain-dump into next week's plan in about ten minutes.",
-    type: "Workflows",
-    tool: "ChatGPT",
-    url: "#",
-    date: "2026-06-17",
-    popularity: 72,
-  },
-  {
-    slug: "beginner-ai-glossary",
-    title: "The No-Jargon AI Glossary",
-    teaser:
-      "LLM, token, context window, RAG. Every term you keep seeing, explained like you're new (because you are).",
-    type: "Guides",
-    tool: "Multi-Tool",
-    url: "#",
-    date: "2026-06-10",
-    popularity: 88,
-  },
-  {
-    slug: "gemini-research-assistant",
-    title: "Turn Gemini Into a Research Assistant",
-    teaser:
-      "Use Gemini plus Google Docs to summarize sources, pull quotes, and build an outline without the busywork.",
-    type: "Systems",
-    tool: "Gemini",
-    url: "#",
-    date: "2026-06-03",
-    popularity: 60,
-  },
-];
+// Hand-written seed resources shown alongside the imported ones. Left empty:
+// the real resources come from the Gmail import (published after review). Add an
+// entry here only if you want to feature something that didn't come from email.
+export const RESOURCES: Resource[] = [];
 
 export function sortResources(
   list: Resource[],
