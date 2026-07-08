@@ -133,3 +133,97 @@
     @apply font-sans;
   }
 }
+/* Blog-post typography for imported resources (the .resource-body wrapper on
+   /resources/[slug]). Emails are stripped to semantic tags in htmlToArticle();
+   these rules give them a clean, native article look in the site's palette. */
+.resource-body {
+  color: #2a2a2a;
+  font-size: 17px;
+  line-height: 1.7;
+}
+.resource-body > :first-child {
+  margin-top: 0;
+}
+.resource-body p {
+  margin: 0 0 1.25rem;
+}
+.resource-body h2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #111827;
+  margin: 2.5rem 0 1rem;
+}
+.resource-body h3 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #111827;
+  margin: 2rem 0 0.75rem;
+}
+.resource-body h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 1.5rem 0 0.5rem;
+}
+.resource-body ul,
+.resource-body ol {
+  margin: 1.25rem 0;
+  padding-left: 1.5rem;
+}
+.resource-body ul {
+  list-style: disc;
+}
+.resource-body ol {
+  list-style: decimal;
+}
+.resource-body li {
+  margin: 0.5rem 0;
+}
+.resource-body a {
+  color: #4040ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.resource-body strong,
+.resource-body b {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.resource-body blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid #e5e7eb;
+  color: #6b7280;
+}
+.resource-body hr {
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 2rem 0;
+}
+.resource-body pre {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: #f6f5f3;
+  border: 1px solid #ded9d3;
+  border-radius: 12px;
+  color: #2a2a2a;
+  font-size: 13.5px;
+  line-height: 1.6;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 28rem;
+  overflow: auto;
+}
+.resource-body :not(pre) > code {
+  padding: 0.1em 0.35em;
+  background: rgba(64, 64, 255, 0.08);
+  border-radius: 4px;
+  color: #1a1a1a;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}

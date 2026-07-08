@@ -6,6 +6,7 @@ import { FLAGS } from "@/lib/flags";
 
 const navLinks = [
   { label: "newsletter", href: "/" },
+  { label: "resources", href: "/resources" },
   { label: "partnerships", href: "/partnerships" },
   ...(FLAGS.about ? [{ label: "about", href: "/about" }] : []),
 ];

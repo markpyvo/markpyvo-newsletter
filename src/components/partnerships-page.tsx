@@ -7,7 +7,7 @@ import {
   Clapperboard,
   Mail,
   Link2,
-  GraduationCap,
+  Zap,
   FileVideo,
   Megaphone,
 } from "lucide-react";
@@ -42,43 +42,43 @@ const MEDIA_KIT = {
   offers: [
     {
       icon: Clapperboard,
-      title: "Sponsored short-form video",
-      body: "One reel/short cross-posted to Instagram, TikTok, and (optionally) LinkedIn. Story-driven, beginner-friendly AI/CS content.",
+      title: "Sponsored video package",
+      body: "1 reel cross-posted to Instagram, TikTok, and YouTube Shorts. Story-driven, high-engagement format.",
+    },
+    {
+      icon: Link2,
+      title: "Link in bio placement",
+      body: "Dedicated link in bio across all platforms for one full week.",
+    },
+    {
+      icon: Megaphone,
+      title: "Paid ad usage",
+      body: "Meta Whitelisting + TikTok Spark Ads. Run my content as paid ads on your brand's account.",
+    },
+    {
+      icon: Zap,
+      title: "Automated DM integration",
+      body: "ManyChat flow that drives followers directly to your product, landing page, or offer.",
     },
     {
       icon: Mail,
       title: "Newsletter feature",
-      body: "A dedicated placement in 0→1 to 1,500+ engaged readers: CS students, early-career builders, and AI-curious beginners.",
-    },
-    {
-      icon: Link2,
-      title: "Link in bio",
-      body: "Dedicated link-in-bio across platforms for a set window, pointing followers to your product or offer.",
-    },
-    {
-      icon: GraduationCap,
-      title: "Content collaboration",
-      body: "A tutorial or walkthrough built around your tool, showing my audience how to actually use it, not just an ad read.",
+      body: "Dedicated feature to 1,500+ subscribers, sent weekly. High open rates, tech-savvy audience.",
     },
     {
       icon: FileVideo,
       title: "Raw video file",
-      body: "The raw export so you can repurpose the content across your own channels and paid ads.",
-    },
-    {
-      icon: Megaphone,
-      title: "Usage rights",
-      body: "Whitelisting / Spark Ads so you can run my content as paid ads from your brand's account.",
+      body: "Get the raw video file to repurpose across your own channels and ads.",
     },
   ],
   // Why brands work with you
   why: [
-    "Audience is genuinely learning AI & CS: high intent, not passive scrollers",
-    "Beginner-first voice: I make technical tools feel approachable",
-    "1,500+ newsletter subscribers with high open rates",
-    "Authentic, hand-made content, no faceless AI slop",
-    "Fast turnaround and clear, professional communication",
-    "Student builder credibility (CS @ McGill), figuring it out in public",
+    "Engaged audience across Instagram, TikTok & LinkedIn",
+    "7%+ engagement rate on Instagram",
+    "1,500+ newsletter subscribers",
+    "Trusted by AI startups like Higgsfield, Whop & Cluely",
+    "Fast turnaround and professional delivery",
+    "Audience deeply engaged in AI & tech",
   ],
 };
 
@@ -105,6 +105,9 @@ export async function PartnershipsPage() {
     getKitSubscriberCount(),
   ]);
   const base = MEDIA_KIT.stats;
+  // Live subscriber label reused in prose (offers + why). Falls back to the
+  // static "1,500+" when Kit is unavailable.
+  const subLabel = kitCount ? `${kitCount.toLocaleString("en-US")}+` : "1,500+";
   const stats = [
     {
       ...base[0],
@@ -117,6 +120,12 @@ export async function PartnershipsPage() {
       value: kitCount ? kitCount.toLocaleString("en-US") : base[3].value,
     },
   ];
+  // Swap the hardcoded "1,500+" in prose for the live subscriber count.
+  const offers = MEDIA_KIT.offers.map((o) => ({
+    ...o,
+    body: o.body.replace("1,500+", subLabel),
+  }));
+  const why = MEDIA_KIT.why.map((w) => w.replace("1,500+", subLabel));
   const statsGrid =
     stats.length >= 4 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-1 sm:grid-cols-3";
 
@@ -183,7 +192,7 @@ export async function PartnershipsPage() {
             What I offer
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
-            {MEDIA_KIT.offers.map((o) => (
+            {offers.map((o) => (
               <div
                 key={o.title}
                 className="bg-white p-6 rounded-[8px] border border-gray-200"
@@ -209,7 +218,7 @@ export async function PartnershipsPage() {
               Why brands work with me
             </h2>
             <div className="grid sm:grid-cols-2 gap-3">
-              {MEDIA_KIT.why.map((w) => (
+              {why.map((w) => (
                 <div
                   key={w}
                   className="flex items-start gap-2.5 text-[14px] leading-snug text-[#2a2a2a]"

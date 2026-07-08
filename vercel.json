@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/refresh-media-kit",
       "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/import-resources",
+      "schedule": "0 9 * * *"
     }
   ]
 }
