@@ -227,3 +227,23 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
 }
+
+/* A link that's the only thing in its paragraph renders as a pill button
+   (e.g. "Open the doc"). Inline links inside sentences stay as text links. */
+.resource-body p > a:only-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0.25rem 0;
+  padding: 0.7em 1.25em;
+  background: #4040ff;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 9999px;
+  transition: opacity 0.15s ease;
+}
+.resource-body p > a:only-child:hover {
+  opacity: 0.9;
+}

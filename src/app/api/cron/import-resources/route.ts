@@ -1,7 +1,12 @@
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { fetchResourceEmails } from "@/lib/resource-source";
-import { emailToResource, mergeResources, deEmDash } from "@/lib/resource-email";
+import {
+  emailToResource,
+  mergeResources,
+  deEmDash,
+  htmlToText,
+} from "@/lib/resource-email";
 import { rewriteToArticle } from "@/lib/resource-rewrite";
 import { sendReviewEmail } from "@/lib/review-email";
 import { randomUUID } from "node:crypto";
@@ -47,8 +52,15 @@ export async function GET(req: Request) {
     }
     // No em dashes anywhere on the posts.
     r.title = deEmDash(r.title);
-    r.teaser = deEmDash(r.teaser);
-    if (r.bodyHtml) r.bodyHtml = deEmDash(r.bodyHtml);
+    if (r.bodyHtml) {
+      r.bodyHtml = deEmDash(r.bodyHtml);
+      // Rebuild the teaser from the FINAL (cleaned) body so it never leaks the
+      // eyebrow glyph, greeting, or raw HTML the pre-LLM text picked up.
+      const text = deEmDash(htmlToText(r.bodyHtml));
+      r.teaser = text.length > 160 ? `${text.slice(0, 160).trim()}...` : text;
+    } else {
+      r.teaser = deEmDash(r.teaser);
+    }
   }
 
   let emailed = 0;
