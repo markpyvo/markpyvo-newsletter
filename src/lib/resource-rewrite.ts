@@ -81,7 +81,8 @@ Rules:
 - Use ONLY these tags: <h2> <h3> <h4> <p> <ul> <ol> <li> <pre> <code> <blockquote> <a href="..."> <strong> <em> <br> <hr>. No classes, no styles, no inline attributes other than an <a> href.
 - Do NOT include the article's main title as a heading (the page renders it separately).
 - Reconstruct the real structure: numbered/labeled item lists become <h3> headings (or an <ol>/<ul>), sub-labels and descriptions become <p>. Commands, code, or things prefixed with "$" become <pre><code>...</code></pre>.
-- Preserve the author's exact wording and links. Do not invent facts, add commentary, or change the meaning.
+- Adapt the copy to read as a standalone BLOG POST, not an email. Keep the author's voice, the facts, and every real link, but rewrite or drop anything that assumes email/video/DM context or a prior interaction, e.g. "you commented the keyword", "the tool I showed in the video", "as promised", "like I said in the newsletter", "reply to this email", "click here to unlock". A reader landing cold on this page must never be confused by missing context. Open with a hook that stands on its own.
+- Do not invent facts, add filler or commentary, or change the substance. Keep it concise.
 - Remove email cruft: preheader text, decorative glyphs or eyebrow labels (e.g. "</>", "A GITHUB STARTER SHELF"), greetings ("Hi all", "Hey"), sign-offs ("Best,", "Cheers", a name signature), logos, "view in browser", social icons, unsubscribe/footer legal.
 - If there is a primary link or call to action (e.g. a Google Doc, a signup, a repo), include it exactly once as its own paragraph on its own line: <p><a href="URL">Short label</a></p>. Do NOT also paste the raw URL as a "or paste this link" fallback, and do not repeat the same link twice.
 - Keep it tight and readable, like a native blog post.`;
