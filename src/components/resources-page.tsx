@@ -16,10 +16,9 @@ import {
 const MONO =
   '[font-family:"Space_Mono","Courier_New",monospace] tracking-[0.55px] uppercase';
 
-type SortKey = "popular" | "newest" | "oldest" | "az";
+type SortKey = "newest" | "oldest" | "az";
 
 const SORTS: { value: SortKey; label: string }[] = [
-  { value: "popular", label: "Most popular" },
   { value: "newest", label: "Newest first" },
   { value: "oldest", label: "Oldest first" },
   { value: "az", label: "A to Z" },
@@ -53,7 +52,7 @@ export function ResourcesPage({ resources }: { resources: Resource[] }) {
   const [tool, setTool] = useState<ResourceTool | "All">("All");
   const [type, setType] = useState<ResourceType | "All">("All");
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<SortKey>("popular");
+  const [sort, setSort] = useState<SortKey>("newest");
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();

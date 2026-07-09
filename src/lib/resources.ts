@@ -52,18 +52,16 @@ export const RESOURCES: Resource[] = [];
 
 export function sortResources(
   list: Resource[],
-  sort: "popular" | "newest" | "oldest" | "az",
+  sort: "newest" | "oldest" | "az",
 ): Resource[] {
   const copy = [...list];
   switch (sort) {
-    case "newest":
-      return copy.sort((a, b) => b.date.localeCompare(a.date));
     case "oldest":
       return copy.sort((a, b) => a.date.localeCompare(b.date));
     case "az":
       return copy.sort((a, b) => a.title.localeCompare(b.title));
-    case "popular":
+    case "newest":
     default:
-      return copy.sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
+      return copy.sort((a, b) => b.date.localeCompare(a.date));
   }
 }
