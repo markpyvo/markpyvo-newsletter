@@ -83,9 +83,6 @@ export function SiteFooter() {
               <Link href="/partnerships" className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase block hover:text-[#4040ff] transition-colors'>
                 Partnerships
               </Link>
-              <a href="/unsubscribe" className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase block hover:text-[#4040ff] transition-colors'>
-                Unsubscribe
-              </a>
               <button
                 onClick={() => setContactOpen(true)}
                 className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase block hover:text-[#4040ff] transition-colors bg-transparent border-none cursor-pointer p-0'
