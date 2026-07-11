@@ -14,6 +14,7 @@ import {
   getImportedResources,
   saveImportedResources,
 } from "@/lib/resource-store";
+import { requireCron } from "@/lib/cron-auth";
 
 // LLM rewrite (when configured) can take a few seconds per email.
 export const maxDuration = 60;
@@ -24,21 +25,23 @@ export const maxDuration = 60;
 // the new ones as DRAFTS. Each draft gets a review email with an approve link;
 // it stays hidden from the site until approved.
 //
-// Auth: Vercel sends `Authorization: Bearer <CRON_SECRET>` when CRON_SECRET is
-// set, so we reject anything else. Everything downstream no-ops gracefully when
-// GMAIL_ACCESS_TOKEN / SUPABASE_* env is missing, so this is safe to deploy
-// before the integrations are wired.
+// Auth: Vercel sends `Authorization: Bearer <CRON_SECRET>`; requireCron rejects
+// anything else (and is fail-closed if CRON_SECRET is unset). Everything
+// downstream no-ops gracefully when GMAIL_ACCESS_TOKEN / SUPABASE_* env is
+// missing, so this is safe to deploy before the integrations are wired.
 export async function GET(req: Request) {
-  const secret = process.env.CRON_SECRET;
-  if (secret && req.headers.get("authorization") !== `Bearer ${secret}`) {
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
+  const denied = requireCron(req);
+  if (denied) return denied;
 
   const emails = await fetchResourceEmails();
   const rawById = new Map(emails.map((e) => [e.id, e]));
   const parsed = emails.map(emailToResource);
 
-  const existing = await getImportedResources({ fresh: true });
+  // Dedupe against ALL imported rows, including drafts: otherwise an
+  // un-approved draft is re-imported every run, re-running the paid LLM
+  // rewrite, minting a fresh review token (invalidating yesterday's approve
+  // link), and sending a duplicate review email.
+  const existing = await getImportedResources({ includeDrafts: true });
   const { added } = mergeResources(existing, parsed);
 
   // For each new draft: LLM-rewrite the body (when configured; falls back to the
@@ -65,7 +68,15 @@ export async function GET(req: Request) {
 
   let emailed = 0;
   if (added.length > 0) {
-    await saveImportedResources(added);
+    const saved = await saveImportedResources(added);
+    // If persistence failed, don't email review links: their approve tokens
+    // point at rows that were never stored, so approval would silently fail.
+    if (!saved) {
+      return NextResponse.json(
+        { error: "Failed to save imported resources", scanned: emails.length },
+        { status: 500 },
+      );
+    }
     // Email a review link for each new draft (best-effort).
     for (const r of added) {
       if (await sendReviewEmail(r)) emailed += 1;

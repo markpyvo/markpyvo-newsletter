@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { IssueCard } from "@/components/issue-card";
-import { SignupForm } from "@/components/signup-form";
 import { ISSUES } from "@/lib/issues";
 
 export const metadata: Metadata = {
@@ -42,7 +41,9 @@ export default function ArchivePage() {
               <p className="font-medium">No issues yet, the first one drops soon!</p>
               <p className="text-sm mt-2">Subscribe so you don&apos;t miss it.</p>
               <div className="mt-6">
-                <SignupForm />
+                <a href="/#subscribe">
+                  <Button size="sm">Subscribe free</Button>
+                </a>
               </div>
             </div>
           ) : (

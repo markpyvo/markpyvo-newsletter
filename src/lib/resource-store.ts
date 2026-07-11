@@ -72,13 +72,13 @@ function resourceToRow(r: Resource): Row {
   };
 }
 
-// Read every imported resource. By default cached + tagged "resources" so the
-// public page serves from cache (the cron busts the tag after an import). The
-// importer passes { fresh: true } so its dedupe always sees current rows and
-// never re-writes what's already stored. Returns [] when Supabase is not
-// configured or the request fails.
+// Read imported resources. Always reads fresh from Supabase (no-store) so the
+// list reflects approvals and imports immediately. Published-only by default;
+// pass { includeDrafts: true } to also get drafts (the importer needs this so
+// its dedupe sees un-approved drafts and never re-imports them). Returns []
+// when Supabase is not configured or the request fails.
 export async function getImportedResources(
-  opts: { fresh?: boolean; includeDrafts?: boolean } = {},
+  opts: { includeDrafts?: boolean } = {},
 ): Promise<Resource[]> {
   const cfg = config();
   if (!cfg) return [];

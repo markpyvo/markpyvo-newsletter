@@ -1,3 +1,5 @@
+import { unstable_cache } from "next/cache";
+
 // Server-only. Pulls the public Instagram follower count via the Apify
 // Instagram Profile Scraper. Only public data is available; reach, impressions,
 // engagement, and demographics are private and cannot be scraped, so those stay
@@ -15,12 +17,18 @@ type ApifyProfile = {
   followersCount?: number;
 };
 
-export async function getInstagramStats(): Promise<InstagramStats | null> {
-  const token = process.env.APIFY_TOKEN;
-  const username = process.env.INSTAGRAM_USERNAME ?? "markpyvovarov";
-  if (!token) return null;
+// The Apify call is a POST, and Next's Data Cache only caches GET/HEAD, so the
+// per-fetch `next: { revalidate, tags }` was inert: every render fired a
+// billable Apify run. Wrap it in unstable_cache instead, which caches the
+// return value regardless of method and honors the "instagram-stats" tag the
+// weekly cron busts. The inner function throws on any failure so a transient
+// error is not cached for a week (only a real follower count gets stored).
+const cachedFollowers = unstable_cache(
+  async (): Promise<number> => {
+    const token = process.env.APIFY_TOKEN;
+    const username = process.env.INSTAGRAM_USERNAME ?? "markpyvovarov";
+    if (!token) throw new Error("APIFY_TOKEN missing");
 
-  try {
     const res = await fetch(
       `https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=${encodeURIComponent(
         token,
@@ -29,16 +37,24 @@ export async function getInstagramStats(): Promise<InstagramStats | null> {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ usernames: [username] }),
-        next: { revalidate: 604800, tags: ["instagram-stats"] },
       },
     );
-    if (!res.ok) return null;
+    if (!res.ok) throw new Error(`Apify returned ${res.status}`);
 
     const items = (await res.json()) as ApifyProfile[];
     const followers = items?.[0]?.followersCount;
-    if (typeof followers !== "number" || followers <= 0) return null;
+    if (typeof followers !== "number" || followers <= 0) {
+      throw new Error("no follower count in Apify response");
+    }
+    return followers;
+  },
+  ["instagram-stats"],
+  { revalidate: 604800, tags: ["instagram-stats"] },
+);
 
-    return { followers };
+export async function getInstagramStats(): Promise<InstagramStats | null> {
+  try {
+    return { followers: await cachedFollowers() };
   } catch {
     return null;
   }
