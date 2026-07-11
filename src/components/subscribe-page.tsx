@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: "How often will I receive emails?",
-    a: "Once a week, every Monday morning. No spam, no daily tips — just one clear, practical email you can actually read.",
+    a: "Once a week, every Monday morning. No spam, no daily tips, just one clear, practical email you can actually read.",
   },
   {
     q: "Do I need to know coding or CS to understand this?",
@@ -29,26 +29,36 @@ export function SubscribePage({
   subscriberCount?: number | null;
 }) {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "done" | "error"
+  >("idle");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Round the live Kit count down to the nearest 100 and add "+", so the copy
-  // stays honest and on-brand ("1,500+"). Falls back to the static value.
+  // stays honest and on-brand ("1,500+"). Below 100 the rounding would read as
+  // "0+", so show the exact count. Falls back to the static value when unknown.
   const readers = subscriberCount
-    ? `${(Math.floor(subscriberCount / 100) * 100).toLocaleString("en-US")}+`
+    ? subscriberCount >= 100
+      ? `${(Math.floor(subscriberCount / 100) * 100).toLocaleString("en-US")}+`
+      : `${subscriberCount}`
     : "1,500+";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.includes("@")) return;
     setStatus("loading");
-    await fetch("/api/subscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-    setStatus("done");
-    setEmail("");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error("subscribe failed");
+      setStatus("done");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -57,7 +67,7 @@ export function SubscribePage({
 
       <main id="subscribe" className="flex-1 flex flex-col items-center px-5 pt-6 pb-16 max-w-md mx-auto w-full">
 
-        {/* Headshot — small centered block */}
+        {/* Headshot, small centered block */}
         <div className="w-56 h-56 overflow-hidden mb-6 bg-gray-100">
           <img
             src="/mark-pro.png"
@@ -103,7 +113,7 @@ export function SubscribePage({
           </a>
         </div>
 
-        {/* Subscribe form — clean hero style */}
+        {/* Subscribe form, clean hero style */}
         {status === "done" ? (
           <div className='w-full text-center py-4 text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase'>
             you&apos;re in, check your inbox ✓
@@ -126,6 +136,12 @@ export function SubscribePage({
               {status === "loading" ? "..." : "Join Free"}
             </button>
           </form>
+        )}
+
+        {status === "error" && (
+          <p className='w-full text-center mt-2 text-red-600 [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase'>
+            something went wrong, please try again
+          </p>
         )}
 
         <p className='flex items-center gap-2 text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase mt-4'>
@@ -169,8 +185,8 @@ export function SubscribePage({
             <div className="text-[14px] leading-[1.85] flex flex-col gap-7">
               <p className="m-0">I remember feeling completely lost when I started learning CS.</p>
               <p className="m-0">Everyone around me seemed to &quot;get it.&quot; The data structures, the algorithms, the AI hype. I was nodding along in lectures while internally panicking that I was the only one who didn&apos;t understand.</p>
-              <p className="m-0">AI moves fast. Really fast. New tools every day, constant updates, endless noise. You don&apos;t have time to live on X, watch every YouTube video, or read every OpenAI release just to keep up —{" "}<span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">especially when you&apos;re still figuring out the basics.</span></p>
-              <p className="m-0">I&apos;m a 19-year-old CS student at McGill. I&apos;m not a genius. I&apos;m not a 10x engineer. I&apos;m just someone who is figuring it out in public — and writing down what actually clicks along the way.</p>
+              <p className="m-0">AI moves fast. Really fast. New tools every day, constant updates, endless noise. You don&apos;t have time to live on X, watch every YouTube video, or read every OpenAI release just to keep up,{" "}<span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">especially when you&apos;re still figuring out the basics.</span></p>
+              <p className="m-0">I&apos;m a 19-year-old CS student at McGill. I&apos;m not a genius. I&apos;m not a 10x engineer. I&apos;m just someone who is figuring it out in public, and writing down what actually clicks along the way.</p>
               <p className="m-0">Every Monday, I send one email breaking down one concept, tool, or idea from the world of AI and CS.{" "}<span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">Plain English. No jargon. No gatekeeping.</span>{" "}The kind of explanation I wish I had when I started.</p>
               <p className="m-0"><span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">I write this newsletter by hand</span>, every week. Read it and you can tell.</p>
             </div>

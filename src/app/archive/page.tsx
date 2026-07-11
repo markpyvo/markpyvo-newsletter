@@ -5,7 +5,7 @@ import { SignupForm } from "@/components/signup-form";
 import { ISSUES } from "@/lib/issues";
 
 export const metadata: Metadata = {
-  title: "Archive — AI Made Simple",
+  title: "Archive, AI Made Simple",
   description: "All past issues of AI Made Simple, the beginner-friendly AI newsletter.",
 };
 
@@ -39,7 +39,7 @@ export default function ArchivePage() {
           {ISSUES.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
               <p className="text-4xl mb-4">📭</p>
-              <p className="font-medium">No issues yet — the first one drops soon!</p>
+              <p className="font-medium">No issues yet, the first one drops soon!</p>
               <p className="text-sm mt-2">Subscribe so you don&apos;t miss it.</p>
               <div className="mt-6">
                 <SignupForm />

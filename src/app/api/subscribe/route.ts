@@ -9,8 +9,13 @@ import { NextRequest, NextResponse } from "next/server";
 const KIT_BASE = "https://api.kit.com/v4";
 
 export async function POST(req: NextRequest) {
-  const { email } = await req.json();
-  if (!email || !email.includes("@")) {
+  let email: unknown;
+  try {
+    ({ email } = await req.json());
+  } catch {
+    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+  }
+  if (typeof email !== "string" || !email.includes("@")) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
