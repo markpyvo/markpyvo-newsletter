@@ -13,8 +13,7 @@ import {
   type ResourceType,
 } from "@/lib/resources";
 
-const MONO =
-  '[font-family:"Space_Mono","Courier_New",monospace] tracking-[0.55px] uppercase';
+import { MONO } from "@/lib/utils";
 
 type SortKey = "newest" | "oldest" | "az";
 

@@ -9,8 +9,7 @@ import { getAllResources } from "@/lib/resource-store";
 import { readingTime } from "@/lib/resource-email";
 import { formatDate } from "@/lib/issues";
 
-const MONO =
-  '[font-family:"Space_Mono","Courier_New",monospace] tracking-[0.55px] uppercase';
+import { MONO } from "@/lib/utils";
 
 export async function generateMetadata({
   params,

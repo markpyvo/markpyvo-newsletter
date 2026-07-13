@@ -12,8 +12,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const MONO =
-  '[font-family:"Space_Mono","Courier_New",monospace] tracking-[0.55px] uppercase';
+import { MONO } from "@/lib/utils";
 
 export default async function ReviewResource({
   params,

@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { PartnershipsHeroActions } from "@/components/partnerships-hero-actions";
 import { getKitSubscriberCount } from "@/lib/kit";
 import { getInstagramStats } from "@/lib/instagram";
+import { MONO } from "@/lib/utils";
 import {
   Clapperboard,
   Mail,
@@ -82,8 +83,6 @@ const MEDIA_KIT = {
   ],
 };
 
-const MONO =
-  '[font-family:"Space_Mono","Courier_New",monospace] tracking-[0.55px] uppercase';
 
 function StatCard({ value, label }: { value: string; label: string }) {
   return (

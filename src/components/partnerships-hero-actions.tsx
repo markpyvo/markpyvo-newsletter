@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { ContactModal } from "@/components/contact-modal";
-
-const MONO =
-  '[font-family:"Space_Mono","Courier_New",monospace] tracking-[0.55px] uppercase';
+import { MONO } from "@/lib/utils";
 
 // The partnerships hero buttons: an external link to the live Beacons media
 // kit, and a "work with me" button that opens the email contact modal.
