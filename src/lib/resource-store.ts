@@ -38,6 +38,12 @@ function config() {
   return { url: url.replace(/\/$/, ""), key };
 }
 
+// The service-role auth headers every Supabase REST call needs. Kept in one
+// place so the key/scheme is not re-typed at each fetch site.
+function authHeaders(cfg: { key: string }) {
+  return { apikey: cfg.key, Authorization: `Bearer ${cfg.key}` };
+}
+
 function rowToResource(r: Row): Resource {
   return {
     slug: r.slug,
@@ -87,7 +93,7 @@ export async function getImportedResources(
     const res = await fetch(
       `${cfg.url}/rest/v1/resources?select=*${statusFilter}&order=date.desc`,
       {
-        headers: { apikey: cfg.key, Authorization: `Bearer ${cfg.key}` },
+        headers: authHeaders(cfg),
         // Always read fresh so the list/detail reflect approvals and imports
         // immediately. One small Supabase query per view is fine at this traffic
         // and avoids the stale-cache bugs the tagged cache kept causing.
@@ -121,7 +127,7 @@ export async function getResourceForReview(
     const res = await fetch(
       `${cfg.url}/rest/v1/resources?select=*&slug=eq.${encodeURIComponent(slug)}&limit=1`,
       {
-        headers: { apikey: cfg.key, Authorization: `Bearer ${cfg.key}` },
+        headers: authHeaders(cfg),
         cache: "no-store",
       },
     );
@@ -147,8 +153,7 @@ export async function publishResource(
       {
         method: "PATCH",
         headers: {
-          apikey: cfg.key,
-          Authorization: `Bearer ${cfg.key}`,
+          ...authHeaders(cfg),
           "Content-Type": "application/json",
           Prefer: "return=representation",
         },
@@ -175,8 +180,7 @@ export async function saveImportedResources(
       {
         method: "POST",
         headers: {
-          apikey: cfg.key,
-          Authorization: `Bearer ${cfg.key}`,
+          ...authHeaders(cfg),
           "Content-Type": "application/json",
           Prefer: "resolution=merge-duplicates,return=minimal",
         },

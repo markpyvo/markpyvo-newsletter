@@ -7,15 +7,23 @@
 // (/api/cron/refresh-media-kit) busts that tag so the number refreshes about
 // once a week. Falls back to null (page keeps its static value) whenever
 // KIT_API_KEY is missing or the request fails.
+// Kit (ConvertKit) v4 API base and auth header, shared with the subscribe
+// route so the host and header name live in one place.
+export const KIT_BASE = "https://api.kit.com/v4";
+
+export function kitHeaders(apiKey: string) {
+  return { "X-Kit-Api-Key": apiKey };
+}
+
 export async function getKitSubscriberCount(): Promise<number | null> {
   const apiKey = process.env.KIT_API_KEY;
   if (!apiKey) return null;
 
   try {
     const res = await fetch(
-      "https://api.kit.com/v4/subscribers?per_page=1&status=active&include_total_count=true",
+      `${KIT_BASE}/subscribers?per_page=1&status=active&include_total_count=true`,
       {
-        headers: { "X-Kit-Api-Key": apiKey, Accept: "application/json" },
+        headers: { ...kitHeaders(apiKey), Accept: "application/json" },
         next: { revalidate: 604800, tags: ["kit-subscribers"] },
       },
     );
