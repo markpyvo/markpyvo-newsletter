@@ -140,7 +140,9 @@ export async function getResourceForReview(
 }
 
 // Publish a draft after review. Requires the matching review token, so the link
-// in the approval email is the only way to flip it live. Returns true on success.
+// in the approval email is the only way to flip it live. The token is cleared on
+// success, making the approve link single-use: a replay of the same link finds
+// no row with that token and is rejected. Returns true on success.
 export async function publishResource(
   slug: string,
   token: string,
@@ -157,7 +159,7 @@ export async function publishResource(
           "Content-Type": "application/json",
           Prefer: "return=representation",
         },
-        body: JSON.stringify({ status: "published" }),
+        body: JSON.stringify({ status: "published", review_token: null }),
       },
     );
     if (!res.ok) return false;
