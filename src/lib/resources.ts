@@ -5,6 +5,8 @@
 // sent emails / Boosend automations (see the automation plan). For now it is
 // hand-maintained. Keep slugs unique: they double as the dedupe key.
 
+import { THIRTY_DAY_APP_ROADMAP_HTML } from "@/content/thirty-day-app-roadmap";
+
 export type ResourceTool = "ChatGPT" | "Claude" | "Gemini" | "Multi-Tool";
 
 export type ResourceType =
@@ -45,10 +47,23 @@ export const TYPES: ResourceType[] = [
   "Tools",
 ];
 
-// Hand-written seed resources shown alongside the imported ones. Left empty:
-// the real resources come from the Gmail import (published after review). Add an
-// entry here only if you want to feature something that didn't come from email.
-export const RESOURCES: Resource[] = [];
+// Hand-written seed resources shown alongside the imported ones. The real
+// resources come from the Gmail import (published after review); add an entry
+// here only to feature something that didn't come from email.
+export const RESOURCES: Resource[] = [
+  {
+    slug: "30-day-app-roadmap",
+    title: "The 30-Day App Roadmap",
+    teaser:
+      "Build, market, monetize, scale. One small idea, four weeks, a real app that makes money and doesn't break at 2am.",
+    type: "Systems",
+    tool: "Claude",
+    url: "/resources/30-day-app-roadmap",
+    date: "2026-07-13",
+    status: "published",
+    bodyHtml: THIRTY_DAY_APP_ROADMAP_HTML,
+  },
+];
 
 export function sortResources(
   list: Resource[],

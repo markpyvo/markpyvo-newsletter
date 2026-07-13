@@ -247,3 +247,23 @@
 .resource-body p > a:only-child:hover {
   opacity: 0.9;
 }
+.resource-body table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  font-size: 15px;
+  display: block;
+  overflow-x: auto;
+}
+.resource-body th,
+.resource-body td {
+  padding: 0.6rem 0.85rem;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+.resource-body th {
+  background: #f6f5f3;
+  font-weight: 600;
+  color: #111827;
+}
