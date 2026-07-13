@@ -10,26 +10,28 @@
 // When unset or the call fails, the caller keeps the regex fallback body, so
 // this is always safe to ship.
 
+import { stripEmailChrome } from "./resource-email";
+
 // Tags the final article is allowed to contain. Everything else is unwrapped.
 const ALLOWED = new Set([
   "h2", "h3", "h4", "p", "ul", "ol", "li", "pre", "code", "blockquote",
   "a", "strong", "b", "em", "i", "br", "hr",
 ]);
 
+// Allow only http(s), mailto, and root-relative links; everything else (e.g.
+// javascript:) is dropped to a bare <a>.
+function safeAnchor(href: string): string {
+  return /^(https?:|mailto:|\/)/i.test(href) ? `<a href="${href}">` : "<a>";
+}
+
 // Strip an email down to structure + text for the model: no <head>, scripts,
 // styles, images, comments, or attributes (except link hrefs). Tags are kept so
 // the model can see the DOM shape. Capped so a runaway email can't blow the
 // context / token budget.
 function stripForLlm(html: string): string {
-  let s = html
-    .replace(/<!DOCTYPE[^>]*>/gi, "")
-    .replace(/<head[\s\S]*?<\/head>/gi, "")
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<!--[\s\S]*?-->/g, "")
-    .replace(/<img\b[^>]*>/gi, "");
+  let s = stripEmailChrome(html).replace(/<img\b[^>]*>/gi, "");
   s = s.replace(/<a\b[^>]*?href\s*=\s*"([^"]*)"[^>]*>/gi, (_m, href) =>
-    /^(https?:|mailto:|\/)/i.test(href) ? `<a href="${href}">` : "<a>",
+    safeAnchor(href),
   );
   s = s.replace(/<(?!\/)(?!a[\s>])([a-zA-Z][\w:-]*)\b[^>]*>/g, "<$1>");
   s = s.replace(/\s+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
@@ -67,7 +69,7 @@ function sanitizeArticleHtml(html: string): string {
     if (!ALLOWED.has(name)) return "";
     if (name === "a" && !slash) {
       const href = m.match(/href\s*=\s*"([^"]*)"/i)?.[1] ?? "";
-      return /^(https?:|mailto:|\/)/i.test(href) ? `<a href="${href}">` : "<a>";
+      return safeAnchor(href);
     }
     return `<${slash}${name}>`;
   });
