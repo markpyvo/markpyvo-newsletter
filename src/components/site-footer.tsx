@@ -77,7 +77,7 @@ export function SiteFooter() {
 
             {/* Footer nav */}
             <nav className="flex flex-col items-end gap-1 col-start-2 row-start-2 row-end-4 justify-self-end mt-6">
-              <Link href="/" className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase block hover:text-[#4040ff] transition-colors'>
+              <Link href="/newsletter" className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase block hover:text-[#4040ff] transition-colors'>
                 Newsletter
               </Link>
               <Link href="/partnerships" className='text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase block hover:text-[#4040ff] transition-colors'>

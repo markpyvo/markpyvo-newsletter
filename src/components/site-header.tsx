@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { FLAGS } from "@/lib/flags";
 
 const navLinks = [
-  { label: "newsletter", href: "/" },
+  { label: "home", href: "/" },
+  { label: "newsletter", href: "/newsletter" },
   { label: "resources", href: "/resources" },
   { label: "partnerships", href: "/partnerships" },
   ...(FLAGS.about ? [{ label: "about", href: "/about" }] : []),
