@@ -74,12 +74,12 @@ export function HomePage({
                 Browse resources
                 <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
               </Link>
-              <a
-                href="#subscribe"
+              <Link
+                href="/newsletter"
                 className="text-sm text-gray-700 underline underline-offset-4 decoration-1 hover:text-[#4040ff] transition-colors"
               >
                 Join the newsletter →
-              </a>
+              </Link>
             </div>
             <p
               className={`flex items-center gap-2 text-[#7e7e7e] text-[11px] mt-8 ${MONO}`}
