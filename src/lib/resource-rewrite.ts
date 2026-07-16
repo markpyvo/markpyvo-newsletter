@@ -11,6 +11,7 @@
 // this is always safe to ship.
 
 import { stripEmailChrome } from "./resource-email";
+import type { ResourceAeo } from "./resources";
 
 // Tags the final article is allowed to contain. Everything else is unwrapped.
 const ALLOWED = new Set([
@@ -88,6 +89,136 @@ Rules:
 - Remove email cruft: preheader text, decorative glyphs or eyebrow labels (e.g. "</>", "A GITHUB STARTER SHELF"), greetings ("Hi all", "Hey"), sign-offs ("Best,", "Cheers", a name signature), logos, "view in browser", social icons, unsubscribe/footer legal.
 - If there is a primary link or call to action (e.g. a Google Doc, a signup, a repo), include it exactly once as its own paragraph on its own line: <p><a href="URL">Short label</a></p>. Do NOT also paste the raw URL as a "or paste this link" fallback, and do not repeat the same link twice.
 - Keep it tight and readable, like a native blog post.`;
+
+// ── Answer-engine (AEO) content generation ───────────────────────────────────
+
+// Turn the finished article into a plain-text prompt for the AEO pass. Reuses
+// the article stripper (it already unwraps tags to text-ish content) and caps
+// length so a long post can't blow the token budget.
+function articleToPlainish(html: string): string {
+  return html
+    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 16000);
+}
+
+const AEO_SYSTEM_PROMPT = `You write answer-engine-optimized (AEO) metadata for a blog post so that AI assistants (ChatGPT, Perplexity, Google AI Overviews) can quote it accurately.
+
+Given the post's title and body, return ONLY a JSON object with this exact shape:
+{
+  "summary": "1-2 sentence direct answer to what this post is about, written so it reads well quoted out of context. Lead with the concrete answer, not 'This post explains...'.",
+  "keyTakeaways": ["3 to 5 short, self-contained, scannable bullets. Each is a complete statement, not a fragment."],
+  "faqs": [{"q": "A natural question a real person would type or ask about this topic", "a": "A concise, self-contained answer (1-3 sentences) that stands on its own"}]
+}
+
+Rules:
+- Output ONLY the JSON. No markdown, no code fences, no commentary.
+- Base everything strictly on the post. Do not invent facts, tools, numbers, or claims not supported by the body.
+- Write 3 to 5 keyTakeaways and 3 to 5 faqs.
+- Questions must be phrased the way people actually search or ask, and be answerable from the post.
+- Keep the author's plain, no-jargon voice. No em dashes anywhere.
+- Every answer must make sense to someone who has NOT read the post.`;
+
+type AeoModelOutput = {
+  summary?: unknown;
+  keyTakeaways?: unknown;
+  faqs?: unknown;
+};
+
+// Coerce the model's JSON into a clean ResourceAeo, dropping anything malformed.
+// Returns null if there's nothing usable, so the caller can skip AEO entirely.
+function parseAeo(raw: string): ResourceAeo | null {
+  const jsonText = stripCodeFences(stripThink(raw));
+  const match = jsonText.match(/\{[\s\S]*\}/);
+  if (!match) return null;
+  let data: AeoModelOutput;
+  try {
+    data = JSON.parse(match[0]) as AeoModelOutput;
+  } catch {
+    return null;
+  }
+
+  const summary =
+    typeof data.summary === "string" && data.summary.trim()
+      ? data.summary.trim()
+      : undefined;
+
+  const keyTakeaways = Array.isArray(data.keyTakeaways)
+    ? data.keyTakeaways
+        .filter((t): t is string => typeof t === "string" && t.trim().length > 0)
+        .map((t) => t.trim())
+        .slice(0, 6)
+    : undefined;
+
+  const faqs = Array.isArray(data.faqs)
+    ? data.faqs
+        .filter(
+          (f): f is { q: string; a: string } =>
+            !!f &&
+            typeof f === "object" &&
+            typeof (f as { q?: unknown }).q === "string" &&
+            typeof (f as { a?: unknown }).a === "string" &&
+            (f as { q: string }).q.trim().length > 0 &&
+            (f as { a: string }).a.trim().length > 0,
+        )
+        .map((f) => ({ q: f.q.trim(), a: f.a.trim() }))
+        .slice(0, 6)
+    : undefined;
+
+  const aeo: ResourceAeo = {};
+  if (summary) aeo.summary = summary;
+  if (keyTakeaways && keyTakeaways.length) aeo.keyTakeaways = keyTakeaways;
+  if (faqs && faqs.length) aeo.faqs = faqs;
+  return aeo.summary || aeo.keyTakeaways || aeo.faqs ? aeo : null;
+}
+
+// Generate AEO content (summary, key takeaways, FAQ) from a finished post body.
+// Same provider config as rewriteToArticle. Always safe: returns null when the
+// LLM is unconfigured or the call fails, and the post just ships without AEO.
+export async function generateAeoContent(
+  bodyHtml: string,
+  title: string,
+): Promise<ResourceAeo | null> {
+  const apiKey = process.env.LLM_API_KEY;
+  const baseUrl = process.env.LLM_BASE_URL;
+  const model = process.env.LLM_MODEL;
+  if (!apiKey || !baseUrl || !model) return null;
+
+  const body = articleToPlainish(bodyHtml);
+  if (body.length < 80) return null;
+
+  try {
+    const res = await fetch(`${baseUrl.replace(/\/$/, "")}/chat/completions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        temperature: 0.2,
+        max_tokens: 2000,
+        messages: [
+          { role: "system", content: AEO_SYSTEM_PROMPT },
+          {
+            role: "user",
+            content: `Title: ${title}\n\nPost body:\n${body}`,
+          },
+        ],
+      }),
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as {
+      choices?: { message?: { content?: string } }[];
+    };
+    return parseAeo(data?.choices?.[0]?.message?.content ?? "");
+  } catch {
+    return null;
+  }
+}
 
 export async function rewriteToArticle(
   rawHtml: string,

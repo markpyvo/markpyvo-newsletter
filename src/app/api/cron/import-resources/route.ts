@@ -7,7 +7,7 @@ import {
   deEmDash,
   htmlToText,
 } from "@/lib/resource-email";
-import { rewriteToArticle } from "@/lib/resource-rewrite";
+import { rewriteToArticle, generateAeoContent } from "@/lib/resource-rewrite";
 import { sendReviewEmail } from "@/lib/review-email";
 import { randomUUID } from "node:crypto";
 import {
@@ -61,6 +61,21 @@ export async function GET(req: Request) {
       // eyebrow glyph, greeting, or raw HTML the pre-LLM text picked up.
       const text = deEmDash(htmlToText(r.bodyHtml));
       r.teaser = text.length > 160 ? `${text.slice(0, 160).trim()}...` : text;
+
+      // Answer-engine content (summary/takeaways/FAQ) from the finished body.
+      // Best-effort: null when the LLM is unconfigured or fails, and the draft
+      // just ships without it. Reviewed before publish like everything else.
+      const aeo = await generateAeoContent(r.bodyHtml, r.title);
+      if (aeo) {
+        r.aeo = {
+          summary: aeo.summary ? deEmDash(aeo.summary) : undefined,
+          keyTakeaways: aeo.keyTakeaways?.map(deEmDash),
+          faqs: aeo.faqs?.map((f) => ({
+            q: deEmDash(f.q),
+            a: deEmDash(f.a),
+          })),
+        };
+      }
     } else {
       r.teaser = deEmDash(r.teaser);
     }

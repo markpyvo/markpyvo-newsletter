@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { getResourceForReview } from "@/lib/resource-store";
 import { readingTime } from "@/lib/resource-email";
 import { formatDate } from "@/lib/issues";
+import { AeoSummary, AeoFaq } from "@/components/resource-aeo";
 
 export const metadata: Metadata = {
   title: "Review resource · 0→1 by Mark",
@@ -85,10 +86,14 @@ export default async function ReviewResource({
             {resource.teaser}
           </p>
 
+          <AeoSummary aeo={resource.aeo} />
+
           <div
             className="resource-body"
             dangerouslySetInnerHTML={{ __html: resource.bodyHtml }}
           />
+
+          <AeoFaq aeo={resource.aeo} />
         </article>
       </main>
 

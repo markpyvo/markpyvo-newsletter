@@ -8,7 +8,14 @@
 //
 // Expected table `resources` (create once):
 //   slug text primary key, title text, teaser text, type text, tool text,
-//   url text, date date, popularity int, body_html text, source_id text
+//   url text, date date, popularity int, body_html text, source_id text,
+//   status text, review_token text, aeo jsonb
+//
+// The `aeo` column holds answer-engine content (summary/takeaways/FAQ). Add it
+// to an existing table with:
+//   alter table resources add column if not exists aeo jsonb;
+// Until it exists, saveImportedResources falls back to saving without it, so
+// imports keep working (posts just lack AEO content until the column is added).
 //
 // Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in the project env.
 
@@ -29,6 +36,7 @@ type Row = {
   source_id: string | null;
   status: string | null;
   review_token: string | null;
+  aeo: Resource["aeo"] | null;
 };
 
 function config() {
@@ -58,6 +66,7 @@ function rowToResource(r: Row): Resource {
     sourceId: r.source_id ?? undefined,
     status: (r.status as Resource["status"]) ?? "published",
     reviewToken: r.review_token ?? undefined,
+    aeo: r.aeo ?? undefined,
   };
 }
 
@@ -75,6 +84,7 @@ function resourceToRow(r: Resource): Row {
     source_id: r.sourceId ?? null,
     status: r.status ?? "published",
     review_token: r.reviewToken ?? null,
+    aeo: r.aeo ?? null,
   };
 }
 
@@ -176,20 +186,36 @@ export async function saveImportedResources(
 ): Promise<boolean> {
   const cfg = config();
   if (!cfg || resources.length === 0) return false;
-  try {
-    const res = await fetch(
-      `${cfg.url}/rest/v1/resources?on_conflict=slug`,
-      {
-        method: "POST",
-        headers: {
-          ...authHeaders(cfg),
-          "Content-Type": "application/json",
-          Prefer: "resolution=merge-duplicates,return=minimal",
-        },
-        body: JSON.stringify(resources.map(resourceToRow)),
+
+  const upsert = (rows: unknown[]) =>
+    fetch(`${cfg.url}/rest/v1/resources?on_conflict=slug`, {
+      method: "POST",
+      headers: {
+        ...authHeaders(cfg),
+        "Content-Type": "application/json",
+        Prefer: "resolution=merge-duplicates,return=minimal",
       },
-    );
-    return res.ok;
+      body: JSON.stringify(rows),
+    });
+
+  try {
+    const res = await upsert(resources.map(resourceToRow));
+    if (res.ok) return true;
+    // The `aeo` column is new (see the migration note above). If this Supabase
+    // project hasn't added it yet, PostgREST 400s on the unknown column. Rather
+    // than break imports, retry once without `aeo` so posts still save (they
+    // just won't have answer-engine content until the column is added).
+    if (res.status === 400) {
+      const retry = await upsert(
+        resources.map((r) => {
+          const { aeo: _aeo, ...rest } = resourceToRow(r);
+          void _aeo;
+          return rest;
+        }),
+      );
+      return retry.ok;
+    }
+    return false;
   } catch {
     return false;
   }
