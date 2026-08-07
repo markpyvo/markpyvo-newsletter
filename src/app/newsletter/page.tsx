@@ -5,7 +5,7 @@ import { getKitSubscriberCount } from "@/lib/kit";
 export const metadata: Metadata = {
   title: "Newsletter · 0→1 by Mark",
   description:
-    "A weekly newsletter that teaches AI to beginners. No jargon, no hype, just clear, practical lessons you can use right away.",
+    "0→1 is a weekly newsletter for people who want to actually build things with AI, not just read about it. The vibecoding tools, workflows, and automations I use to ship real apps, from someone building it in public.",
 };
 
 export default async function Newsletter() {
