@@ -88,7 +88,7 @@ export function SubscribePage({
 
         {/* Description */}
         <p className="text-center text-gray-600 text-base leading-relaxed mb-8">
-          the AI and CS tips I wish I had at the start. from a 19-year-old CS student at McGill still figuring it out.
+          for people who want to actually build things with AI, not just read about it. the vibecoding tools, workflows, and automations I use to ship real apps, from someone building it in public.
         </p>
 
         {/* Social icons */}
@@ -178,16 +178,16 @@ export function SubscribePage({
               <dt className="font-bold">From</dt>
               <dd className="text-[#2a2a2a] tracking-[0.2px] break-words">Mark &lt;mark@markpyvo.ca&gt;</dd>
               <dt className="font-bold">Re</dt>
-              <dd className="text-[#2a2a2a] tracking-[0.2px]">Why I started this newsletter</dd>
+              <dd className="text-[#2a2a2a] tracking-[0.2px]">Why I build in public</dd>
             </dl>
 
             {/* Body */}
             <div className="text-[14px] leading-[1.85] flex flex-col gap-7">
-              <p className="m-0">I remember feeling completely lost when I started learning CS.</p>
-              <p className="m-0">Everyone around me seemed to &quot;get it.&quot; The data structures, the algorithms, the AI hype. I was nodding along in lectures while internally panicking that I was the only one who didn&apos;t understand.</p>
-              <p className="m-0">AI moves fast. Really fast. New tools every day, constant updates, endless noise. You don&apos;t have time to live on X, watch every YouTube video, or read every OpenAI release just to keep up,{" "}<span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">especially when you&apos;re still figuring out the basics.</span></p>
-              <p className="m-0">I&apos;m a 19-year-old CS student at McGill. I&apos;m not a genius. I&apos;m not a 10x engineer. I&apos;m just someone who is figuring it out in public, and writing down what actually clicks along the way.</p>
-              <p className="m-0">Every Monday, I send one email breaking down one concept, tool, or idea from the world of AI and CS.{" "}<span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">Plain English. No jargon. No gatekeeping.</span>{" "}The kind of explanation I wish I had when I started.</p>
+              <p className="m-0">I got tired of reading about AI and never actually building anything with it.</p>
+              <p className="m-0">There is so much content telling you what is possible. Endless threads, hot takes, another 60-second video hyping the tool of the week. But almost nobody shows you{" "}<span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">the actual workflow</span>, how they went from a rough idea to something that actually ships.</p>
+              <p className="m-0">AI moves fast. Really fast. New tools every day, constant updates, endless noise. Most of it you will never touch. The hard part is not finding tools,{" "}<span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">it is knowing which ones actually help you build.</span></p>
+              <p className="m-0">I&apos;m a 19-year-old CS student at McGill. I&apos;m not a genius. I&apos;m not a 10x engineer. I&apos;m just someone building real apps and automations in public, and writing down what actually works along the way.</p>
+              <p className="m-0">Every Monday, I send one email breaking down the vibecoding tools, workflows, and AI automations I actually use to ship real apps.{" "}<span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">No fluff. No hype-chasing. No gatekeeping.</span>{" "}Just what&apos;s actually working, from someone building it in public.</p>
               <p className="m-0"><span className="bg-[rgba(64,64,255,0.12)] px-[2.8px]">I write this newsletter by hand</span>, every week. Read it and you can tell.</p>
             </div>
 
