@@ -20,9 +20,9 @@ export function SiteHeader() {
 
   return (
     <header className="w-full border-b border-gray-100">
-      <div className="max-w-5xl mx-auto px-5 sm:px-6 h-16 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+      <div className="max-w-5xl mx-auto px-5 sm:px-6 h-16 flex sm:grid sm:grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
         {/* Brand: square face + name */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0 justify-self-start group" aria-label="Mark, home">
+        <Link href="/" className="flex items-center gap-2.5 shrink-0 sm:justify-self-start group" aria-label="Mark, home">
           <img
             src="/mark.jpg"
             alt="Mark"
@@ -34,12 +34,12 @@ export function SiteHeader() {
         </Link>
 
         {/* Nav */}
-        <nav className="flex items-center gap-1 justify-self-center">
+        <nav className="flex items-center gap-0.5 sm:gap-1 min-w-0 flex-1 overflow-x-auto sm:flex-none sm:justify-self-center">
           {navLinks.map(({ label, href }) => (
             <Link
               key={href}
               href={href}
-              className={`px-3 py-2 rounded-md text-sm transition-colors ${
+              className={`px-2 sm:px-3 py-2 rounded-md text-sm whitespace-nowrap transition-colors ${
                 isActive(href)
                   ? "font-semibold text-gray-900"
                   : "text-gray-500 hover:text-gray-900"
