@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/import-resources",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/sync-boosend-contacts",
+      "schedule": "0 16 * * *"
     }
   ]
 }
