@@ -1,0 +1,334 @@
+{
+  "id": "boosend-kit-6c3d139f0b7f62da",
+  "name": "Boosend -> Kit contact sync",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "boosend-new-contact",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Boosend Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-200, 300],
+      "webhookId": "boosend-new-contact"
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "raw-stage",
+              "name": "_debug_stage",
+              "value": "1_raw_boosend_payload",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "debug-raw",
+      "name": "Debug: Raw Boosend Payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [20, 300]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "extract-email",
+              "name": "email",
+              "value": "={{ ($json.body?.email ?? $json.body?.contact?.email ?? $json.body?.data?.email ?? $json.body?.subscriber?.email ?? $json.email ?? '').toString().trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "extract-first-name",
+              "name": "first_name",
+              "value": "={{ $json.body?.first_name ?? $json.body?.firstName ?? $json.body?.contact?.first_name ?? $json.body?.data?.first_name ?? ($json.body?.name ? $json.body.name.split(' ')[0] : undefined) ?? $json.first_name ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "debug-stage-2",
+              "name": "_debug_stage",
+              "value": "2_extracted_email_and_name",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "extract-fields",
+      "name": "Extract Email + Name",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-email",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-has-email",
+      "name": "Has Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {},
+      "id": "no-email-skip",
+      "name": "Skipped: No Email",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [680, 460]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.kit.com/v4/subscribers",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { email_address: $json.email, first_name: $json.first_name || undefined } }}",
+        "options": {}
+      },
+      "id": "kit-create-subscriber",
+      "name": "Kit: Create Or Update Subscriber",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Kit API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "sub-id",
+              "name": "subscriber_id",
+              "value": "={{ $json.subscriber.id }}",
+              "type": "number"
+            },
+            {
+              "id": "debug-stage-3",
+              "name": "_debug_stage",
+              "value": "3_kit_subscriber_created_or_updated",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "debug-kit-subscriber",
+      "name": "Debug: Kit Subscriber Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.kit.com/v4/tags/22495453/subscribers/{{ $json.subscriber_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={}",
+        "options": {}
+      },
+      "id": "kit-tag-subscriber",
+      "name": "Kit: Tag n8n_boosend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Kit API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "final-status",
+              "name": "_debug_stage",
+              "value": "4_tag_applied_success",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "debug-tag-success",
+      "name": "Debug: Tag Applied OK",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1340, 220]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "final-status-err",
+              "name": "_debug_stage",
+              "value": "4_tag_applied_FAILED",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "debug-tag-failed",
+      "name": "Debug: Tag Apply FAILED",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1340, 400]
+    }
+  ],
+  "connections": {
+    "Boosend Webhook": {
+      "main": [
+        [
+          {
+            "node": "Debug: Raw Boosend Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Debug: Raw Boosend Payload": {
+      "main": [
+        [
+          {
+            "node": "Extract Email + Name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Email + Name": {
+      "main": [
+        [
+          {
+            "node": "Has Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Email?": {
+      "main": [
+        [
+          {
+            "node": "Kit: Create Or Update Subscriber",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skipped: No Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kit: Create Or Update Subscriber": {
+      "main": [
+        [
+          {
+            "node": "Debug: Kit Subscriber Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Debug: Kit Subscriber Response": {
+      "main": [
+        [
+          {
+            "node": "Kit: Tag n8n_boosend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kit: Tag n8n_boosend": {
+      "main": [
+        [
+          {
+            "node": "Debug: Tag Applied OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Debug: Tag Apply FAILED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
