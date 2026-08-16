@@ -42,6 +42,15 @@ function extractContact(body: Record<string, unknown>) {
   return { email: email.trim(), first_name: name };
 }
 
+// Some integration builders verify a webhook URL with a GET before treating
+// it as connected. Respond 200 so that handshake doesn't fail, without doing
+// anything (no Kit calls on GET).
+export async function GET(req: Request) {
+  const denied = requireWebhookToken(req, "BOOSEND_WEBHOOK_SECRET");
+  if (denied) return denied;
+  return NextResponse.json({ ok: true });
+}
+
 export async function POST(req: Request) {
   const denied = requireWebhookToken(req, "BOOSEND_WEBHOOK_SECRET");
   if (denied) return denied;
