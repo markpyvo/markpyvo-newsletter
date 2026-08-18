@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { SubscribeSuccess } from "@/components/subscribe-success";
 import { MONO } from "@/lib/utils";
 import type { Resource } from "@/lib/resources";
 
@@ -45,6 +46,10 @@ export function HomePage({
       setStatus("error");
     }
   };
+
+  if (status === "done") {
+    return <SubscribeSuccess />;
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -120,34 +125,26 @@ export function HomePage({
               hand.
             </p>
 
-            {status === "done" ? (
-              <div
-                className={`py-4 text-[#4040ff] text-[11px] ${MONO}`}
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col sm:flex-row gap-2.5 max-w-md"
+            >
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className='flex-1 text-sm text-gray-800 placeholder:text-gray-400 bg-white outline-none px-4 py-3.5 border border-gray-200 rounded-full focus:border-[#4040ff] transition-colors [font-family:"Space_Mono","Courier_New",monospace]'
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className='shrink-0 bg-[#4040ff] text-white rounded-full px-7 py-3.5 [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase font-bold hover:opacity-90 transition-opacity disabled:opacity-40'
               >
-                you&apos;re in, check your inbox ✓
-              </div>
-            ) : (
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col sm:flex-row gap-2.5 max-w-md"
-              >
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  className='flex-1 text-sm text-gray-800 placeholder:text-gray-400 bg-white outline-none px-4 py-3.5 border border-gray-200 rounded-full focus:border-[#4040ff] transition-colors [font-family:"Space_Mono","Courier_New",monospace]'
-                />
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className='shrink-0 bg-[#4040ff] text-white rounded-full px-7 py-3.5 [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase font-bold hover:opacity-90 transition-opacity disabled:opacity-40'
-                >
-                  {status === "loading" ? "..." : "Join Free"}
-                </button>
-              </form>
-            )}
+                {status === "loading" ? "..." : "Join Free"}
+              </button>
+            </form>
 
             {status === "error" && (
               <p className={`mt-3 text-red-600 text-[11px] ${MONO}`}>

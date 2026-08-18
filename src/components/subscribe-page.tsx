@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { SubscribeSuccess } from "@/components/subscribe-success";
 
 const faqs = [
   {
@@ -61,6 +62,10 @@ export function SubscribePage({
     }
   };
 
+  if (status === "done") {
+    return <SubscribeSuccess />;
+  }
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <SiteHeader />
@@ -114,29 +119,23 @@ export function SubscribePage({
         </div>
 
         {/* Subscribe form, clean hero style */}
-        {status === "done" ? (
-          <div className='w-full text-center py-4 text-[#7e7e7e] [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase'>
-            you&apos;re in, check your inbox ✓
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="w-full flex gap-2 mt-2">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className='flex-1 text-sm text-gray-800 placeholder:text-gray-400 bg-white outline-none px-4 py-3 border border-gray-200 rounded-[4px] [font-family:"Space_Mono","Courier_New",monospace]'
-            />
-            <button
-              type="submit"
-              disabled={status === "loading"}
-              className='shrink-0 bg-white border border-gray-200 rounded-[4px] px-5 py-3 [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase font-bold text-gray-900 hover:border-gray-400 transition-colors disabled:opacity-40'
-            >
-              {status === "loading" ? "..." : "Join Free"}
-            </button>
-          </form>
-        )}
+        <form onSubmit={handleSubmit} className="w-full flex gap-2 mt-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            required
+            className='flex-1 text-sm text-gray-800 placeholder:text-gray-400 bg-white outline-none px-4 py-3 border border-gray-200 rounded-[4px] [font-family:"Space_Mono","Courier_New",monospace]'
+          />
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className='shrink-0 bg-white border border-gray-200 rounded-[4px] px-5 py-3 [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase font-bold text-gray-900 hover:border-gray-400 transition-colors disabled:opacity-40'
+          >
+            {status === "loading" ? "..." : "Join Free"}
+          </button>
+        </form>
 
         {status === "error" && (
           <p className='w-full text-center mt-2 text-red-600 [font-family:"Space_Mono","Courier_New",monospace] text-[11px] tracking-[0.55px] uppercase'>
