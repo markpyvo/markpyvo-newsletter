@@ -8,12 +8,14 @@ import {
   htmlToText,
 } from "@/lib/resource-email";
 import { rewriteToArticle, generateAeoContent } from "@/lib/resource-rewrite";
+import { linkableResources } from "@/lib/related-resources";
 import { sendReviewEmail } from "@/lib/review-email";
 import { randomUUID } from "node:crypto";
 import {
   getImportedResources,
   saveImportedResources,
 } from "@/lib/resource-store";
+import { RESOURCES } from "@/lib/resources";
 import { requireCron } from "@/lib/cron-auth";
 
 // LLM rewrite (when configured) can take a few seconds per email.
@@ -44,13 +46,21 @@ export async function GET(req: Request) {
   const existing = await getImportedResources({ includeDrafts: true });
   const { added } = mergeResources(existing, parsed);
 
+  // Existing published posts the rewrite can link out to (internal linking
+  // for AEO/SEO; see docs/internal-linking-seo.md). Capped so the prompt
+  // stays small as the catalog grows; most recent posts are the most likely
+  // to still be relevant to link.
+  const linkCandidates = linkableResources([...RESOURCES, ...existing])
+    .slice(0, 20)
+    .map((r) => ({ title: r.title, url: r.url, teaser: r.teaser }));
+
   // For each new draft: LLM-rewrite the body (when configured; falls back to the
   // deterministic body) and mint a review token for the approval link.
   for (const r of added) {
     r.reviewToken = randomUUID();
     const raw = r.sourceId ? rawById.get(r.sourceId) : undefined;
     if (raw) {
-      const better = await rewriteToArticle(raw.html, r.title);
+      const better = await rewriteToArticle(raw.html, r.title, linkCandidates);
       if (better) r.bodyHtml = better;
     }
     // No em dashes anywhere on the posts.

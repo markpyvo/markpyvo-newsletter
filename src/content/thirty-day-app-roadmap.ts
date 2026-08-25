@@ -145,7 +145,7 @@ export const THIRTY_DAY_APP_ROADMAP_HTML = `
 </ul>
 
 <h4>2. Run a full security audit.</h4>
-<p>With paying users and real data, security stops being optional. Lock down your RLS (Row-Level Security, the rules that decide who can read or write which rows in Supabase), your environment variables and secrets (API keys, tokens, never exposed to the client), and your webhooks (verify they're authenticated so nobody can spoof them). This is the unglamorous work that prevents the 2am disaster.</p>
+<p>With paying users and real data, security stops being optional. Lock down your RLS (Row-Level Security, the rules that decide who can read or write which rows in Supabase), your environment variables and secrets (API keys, tokens, never exposed to the client), and your webhooks (verify they're authenticated so nobody can spoof them). This is the unglamorous work that prevents the 2am disaster, and the same category of mistake that can get you an actual fine: see <a href="/resources/how-to-not-get-sued-101">How to Not Get Sued 101</a> for the specific ones (fake reviews, broken access checks, skipped accessibility) that carry real legal risk.</p>
 
 <h4>3. Track the metrics that matter.</h4>
 <p>Four numbers tell you the health of the whole funnel: <strong>signups</strong> (are people arriving?), <strong>activation</strong> (do they reach the "aha" moment?), <strong>conversion</strong> (do they pay?), and <strong>churn</strong> (do they leave?). Watch where people drop off and fix that specific step. Data turns growth from guessing into steering: double down on what the numbers reward, cut what they don't.</p>

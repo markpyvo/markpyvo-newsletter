@@ -2,7 +2,7 @@
 // Authored as semantic HTML to match the .resource-body article styling used by
 // imported posts. No em dashes anywhere, per the site's writing rule.
 export const HOW_TO_NOT_GET_SUED_101_HTML = `
-<p>Happy Monday, issue #1! Two parts each time: vibecoded app issues I see constantly plus how to fix them, and an agent I recently built that you're welcome to steal.</p>
+<p>Happy Monday, issue #1! Two parts each time: vibecoded app issues I see constantly plus how to fix them, and an agent I recently built that you're welcome to steal. If you're following the <a href="/resources/30-day-app-roadmap">30-Day App Roadmap</a>, these are exactly the kind of gaps the week 4 security audit is meant to catch.</p>
 
 <p>You guys loved my whiteboard video on vibecoded security, so here are 3 more that can get you a meeting with Harvey Specter if you ignore them.</p>
 

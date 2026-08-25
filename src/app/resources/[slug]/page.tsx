@@ -9,6 +9,7 @@ import { getAllResources } from "@/lib/resource-store";
 import { readingTime } from "@/lib/resource-email";
 import { formatDate } from "@/lib/issues";
 import { AeoSummary, AeoFaq } from "@/components/resource-aeo";
+import { RelatedResources } from "@/components/related-resources";
 import {
   SITE,
   blogPostingJsonLd,
@@ -58,7 +59,8 @@ export default async function ResourceDetail({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const resource = getResourceBySlug(await getAllResources(), slug);
+  const allResources = await getAllResources();
+  const resource = getResourceBySlug(allResources, slug);
 
   // Seeds without a body are just links out; nothing to render as a post.
   if (!resource || !resource.bodyHtml) notFound();
@@ -125,6 +127,9 @@ export default async function ResourceDetail({
 
           {/* FAQ (AEO). */}
           <AeoFaq aeo={resource.aeo} />
+
+          {/* Internal links to related resources (AEO/SEO topical graph). */}
+          <RelatedResources current={resource} all={allResources} />
         </article>
       </main>
 

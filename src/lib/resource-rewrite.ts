@@ -88,6 +88,7 @@ Rules:
 - Do not invent facts, add filler or commentary, or change the substance. Keep it concise.
 - Remove email cruft: preheader text, decorative glyphs or eyebrow labels (e.g. "</>", "A GITHUB STARTER SHELF"), greetings ("Hi all", "Hey"), sign-offs ("Best,", "Cheers", a name signature), logos, "view in browser", social icons, unsubscribe/footer legal.
 - If there is a primary link or call to action (e.g. a Google Doc, a signup, a repo), include it exactly once as its own paragraph on its own line: <p><a href="URL">Short label</a></p>. Do NOT also paste the raw URL as a "or paste this link" fallback, and do not repeat the same link twice.
+- You will be given a list of RELATED POSTS ALREADY ON THE SITE (title + url). Where a related post is genuinely relevant to a sentence you're writing, link it inline as a natural mid-sentence phrase, e.g. "...the same mistake I covered in <a href="/resources/...">the app roadmap</a>...". Add at most 2 such links, only when truly relevant, using ONLY the exact urls given. Never invent a url, never link the same post twice, and never force a link where nothing fits.
 - Keep it tight and readable, like a native blog post.`;
 
 // ── Answer-engine (AEO) content generation ───────────────────────────────────
@@ -220,9 +221,22 @@ export async function generateAeoContent(
   }
 }
 
+// Internal-linking candidates handed to the rewrite prompt: just enough for
+// the model to judge relevance and produce a valid href. See
+// docs/internal-linking-seo.md.
+export type LinkCandidate = { title: string; url: string; teaser: string };
+
+function formatLinkCandidates(candidates: LinkCandidate[]): string {
+  if (candidates.length === 0) return "(none)";
+  return candidates
+    .map((c) => `- "${c.title}" (${c.url}): ${c.teaser}`)
+    .join("\n");
+}
+
 export async function rewriteToArticle(
   rawHtml: string,
   title: string,
+  relatedCandidates: LinkCandidate[] = [],
 ): Promise<string | null> {
   const apiKey = process.env.LLM_API_KEY;
   const baseUrl = process.env.LLM_BASE_URL;
@@ -247,7 +261,7 @@ export async function rewriteToArticle(
           { role: "system", content: SYSTEM_PROMPT },
           {
             role: "user",
-            content: `Article title (do not repeat as a heading): ${title}\n\nEmail HTML:\n${cleaned}`,
+            content: `Article title (do not repeat as a heading): ${title}\n\nRelated posts already on the site:\n${formatLinkCandidates(relatedCandidates)}\n\nEmail HTML:\n${cleaned}`,
           },
         ],
       }),

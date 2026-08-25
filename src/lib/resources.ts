@@ -4,6 +4,10 @@
 // Long term, this array is meant to be generated automatically from your
 // sent emails / Boosend automations (see the automation plan). For now it is
 // hand-maintained. Keep slugs unique: they double as the dedupe key.
+//
+// When adding a post: read docs/internal-linking-seo.md and add 1-2 inline
+// links to/from related existing posts. The "keep exploring" block at the
+// bottom of every post page is automatic; contextual in-body links are not.
 
 import { THIRTY_DAY_APP_ROADMAP_HTML } from "@/content/thirty-day-app-roadmap";
 import { HOW_TO_NOT_GET_SUED_101_HTML } from "@/content/how-to-not-get-sued-101";
