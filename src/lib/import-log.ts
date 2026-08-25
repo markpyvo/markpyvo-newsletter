@@ -24,6 +24,7 @@ type RunResult = {
   added: number;
   emailed: number;
   slugs: string[];
+  deferred: number;
 };
 
 function token() {
@@ -89,7 +90,9 @@ export async function logImportRun(result: RunResult): Promise<void> {
     {
       line:
         result.added > 0
-          ? `- ${now} UTC: drafted ${result.added} new resource(s): ${result.slugs.join(", ")}`
+          ? `- ${now} UTC: drafted ${result.added} new resource(s): ${result.slugs.join(", ")}${
+              result.deferred > 0 ? ` (${result.deferred} more queued for tomorrow)` : ""
+            }`
           : `- ${now} UTC: no new resources today`,
       message:
         result.added > 0 ? `${date}: drafted ${result.added}` : `${date}: nothing new`,

@@ -22,6 +22,15 @@ import { logImportRun } from "@/lib/import-log";
 // LLM rewrite (when configured) can take a few seconds per email.
 export const maxDuration = 60;
 
+// Each draft costs two LLM calls (rewrite + AEO), which can run ~10-15s
+// apiece. A backlog of unprocessed emails (e.g. first run, or a gap in the
+// schedule) can otherwise blow past maxDuration and get hard-killed by the
+// platform before the response, the review emails, or the activity log ever
+// go out. Capping the batch keeps each run fast and reliable; anything past
+// the cap is simply left unsaved, so it reappears as "new" on tomorrow's run
+// and the backlog drains on its own over a few days instead of one timeout.
+const MAX_DRAFTS_PER_RUN = 3;
+
 // Daily Vercel cron (see vercel.json). Reads the dedicated Boosend resources
 // inbox, converts each new HTML email into a resource + blog-post body (LLM
 // rewrite when configured), dedupes against what's already imported, and saves
@@ -45,7 +54,9 @@ export async function GET(req: Request) {
   // rewrite, minting a fresh review token (invalidating yesterday's approve
   // link), and sending a duplicate review email.
   const existing = await getImportedResources({ includeDrafts: true });
-  const { added } = mergeResources(existing, parsed);
+  const { added: allAdded } = mergeResources(existing, parsed);
+  const added = allAdded.slice(0, MAX_DRAFTS_PER_RUN);
+  const deferred = allAdded.length - added.length;
 
   // Existing published posts the rewrite can link out to (internal linking
   // for AEO/SEO; see docs/internal-linking-seo.md). Capped so the prompt
@@ -117,6 +128,7 @@ export async function GET(req: Request) {
     added: added.length,
     emailed,
     slugs: added.map((r) => r.slug),
+    deferred,
   });
 
   return NextResponse.json({
@@ -124,5 +136,6 @@ export async function GET(req: Request) {
     drafted: added.length,
     emailed,
     slugs: added.map((r) => r.slug),
+    deferred,
   });
 }
