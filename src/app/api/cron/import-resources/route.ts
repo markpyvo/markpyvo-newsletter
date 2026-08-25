@@ -17,6 +17,7 @@ import {
 } from "@/lib/resource-store";
 import { RESOURCES } from "@/lib/resources";
 import { requireCron } from "@/lib/cron-auth";
+import { logImportRun } from "@/lib/import-log";
 
 // LLM rewrite (when configured) can take a few seconds per email.
 export const maxDuration = 60;
@@ -108,6 +109,15 @@ export async function GET(req: Request) {
     }
     revalidateTag("resources", "max");
   }
+
+  // Best-effort activity log, committed to a private GitHub repo. Never
+  // affects the response: logging failures are swallowed inside the helper.
+  await logImportRun({
+    scanned: emails.length,
+    added: added.length,
+    emailed,
+    slugs: added.map((r) => r.slug),
+  });
 
   return NextResponse.json({
     scanned: emails.length,
