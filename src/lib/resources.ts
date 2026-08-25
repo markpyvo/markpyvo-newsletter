@@ -6,6 +6,7 @@
 // hand-maintained. Keep slugs unique: they double as the dedupe key.
 
 import { THIRTY_DAY_APP_ROADMAP_HTML } from "@/content/thirty-day-app-roadmap";
+import { HOW_TO_NOT_GET_SUED_101_HTML } from "@/content/how-to-not-get-sued-101";
 
 export type ResourceTool = "ChatGPT" | "Claude" | "Gemini" | "Multi-Tool";
 
@@ -96,6 +97,47 @@ export const RESOURCES: Resource[] = [
         {
           q: "When should I start charging for the app?",
           a: "In week 3, once the core works and you have early users. Adding payments early is how you find out whether people will actually pay before you invest more time.",
+        },
+      ],
+    },
+  },
+  {
+    slug: "how-to-not-get-sued-101",
+    title: "How to Not Get Sued 101",
+    teaser:
+      "Three vibecoded security mistakes that carry real fines (fake reviews, broken access checks, ignored accessibility), plus a free stock news bot that ranks headlines by price impact.",
+    type: "Guides",
+    tool: "Claude",
+    url: "/resources/how-to-not-get-sued-101",
+    date: "2026-08-24",
+    status: "published",
+    bodyHtml: HOW_TO_NOT_GET_SUED_101_HTML,
+    aeo: {
+      summary:
+        "Three vibecoded app mistakes carry real legal and financial risk: fake reviews (FTC fines up to $51,744 per review), missing ownership checks on predictable URLs (like the July 2026 Claude shared-chat indexing incident), and skipped accessibility work. Each has a one-line prompt fix, alongside a free open-source bot that ranks stock news by estimated price impact.",
+      keyTakeaways: [
+        "The FTC can fine $51,744 per fake review, including AI-generated testimonials, so only display reviews traceable to a real person.",
+        "Checking a user is logged in isn't enough; also verify they own the specific resource before returning it, or predictable URLs leak other people's data.",
+        "Anthropic's July 2026 incident, where shared Claude chats got indexed by Google, is a real example of a missing noindex tag plus missing access checks.",
+        "AI coding tools skip accessibility unless asked; missing alt text and bad contrast can trigger demand letters even without a lawsuit.",
+        "A ~250-line Python bot can pull stock news via RSS, score it with an LLM that's allowed to say \"I don't know,\" and rank headlines by estimated move times confidence.",
+      ],
+      faqs: [
+        {
+          q: "How much can fake reviews actually cost a business?",
+          a: "Under the FTC's rule against fake and AI-generated reviews, the civil penalty is $51,744 per violation, calculated per review, not per company.",
+        },
+        {
+          q: "What is the URL-based data leak vibecoders keep making?",
+          a: "Apps often check that a user is logged in but never confirm they own the specific record they're requesting, so changing a number in the URL (like /orders/104 to /orders/105) exposes someone else's data.",
+        },
+        {
+          q: "What happened with Anthropic's shared Claude chats in July 2026?",
+          a: "Shared Claude chats and artifacts had no noindex tag, so Google indexed thousands of them, some containing medical records and API keys, exposing a broader pattern of missing access and indexing controls.",
+        },
+        {
+          q: "What does the stock news bot actually do?",
+          a: "It pulls a stock's news from three Google News RSS feeds, dedupes by hashing each link, sends surviving articles to an LLM for a direction/move/confidence score, ranks them by estimated move times confidence weight, and sends the top 3 to Telegram twice a day via GitHub Actions.",
         },
       ],
     },
